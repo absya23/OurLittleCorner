@@ -1,0 +1,24 @@
+@use "../../../scss/" as *;
+
+.homepage {
+  .slider {
+    // max-width: 1080px;
+    // flex: 1;
+  }
+}
+
+.slick-prev {
+  left: 10px !important;
+}
+.slick-next {
+  right: 10px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #333 !important;
+}
+
+.slick-slide {
+  // max-width: 1140px !important;
+}
