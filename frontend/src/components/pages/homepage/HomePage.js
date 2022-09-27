@@ -16,12 +16,12 @@ const HomePage = () => {
       <Product title="Chủ đề mới" length={4}>
         <Category></Category>
       </Product>
-      <section className="collection">
+      <section className="collection mb-10">
         <div className="container">
           <div className="mb-5 title">
             <ProductTitle>Bộ sưu tập</ProductTitle>
-            <CarouselCenter></CarouselCenter>
           </div>
+          <CarouselCenter></CarouselCenter>
         </div>
       </section>
     </div>

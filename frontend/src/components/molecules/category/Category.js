@@ -16,7 +16,7 @@ const Category = () => {
     <div className="category w-full flex gap-x-5 mt-5 mb-3">
       {data.length > 0 &&
         data.map((item) => (
-          <div key={item.id}>
+          <div key={item.id} className="cursor-pointer">
             <img
               src={item.image}
               alt=""

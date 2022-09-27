@@ -1,13 +1,16 @@
 import React from "react";
 import "./ProductItem.scss";
 
-const ProductItem = () => {
+const ProductItem = ({ tag = true }) => {
   return (
-    <div className="product-item">
+    <div className="product-item cursor-pointer">
       <div className="relative mb-2 image">
-        <span className="absolute top-0 left-0 z-10 px-2 py-1 text-white bg-primary">
-          New
-        </span>
+        {tag && (
+          <span className="absolute top-0 left-0 z-10 px-2 py-1 text-white bg-primary">
+            New
+          </span>
+        )}
+
         <img
           src="https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20220922/22090127_thumb.jpg"
           alt=""

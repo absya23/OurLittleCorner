@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Footer from "./components/organisms/footer/Footer";
 import Header from "./components/organisms/header/Header";
 import RouteConfig from "./config/RouteConfig";
 
@@ -9,6 +10,7 @@ function App() {
       <Suspense fallback={<></>}>
         <RouteConfig></RouteConfig>
       </Suspense>
+      <Footer></Footer>
     </>
   );
 }
