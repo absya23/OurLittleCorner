@@ -1,3 +1,4 @@
+@use "./scss/" as *;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -48,4 +49,23 @@
 img {
   object-fit: cover;
   object-position: center;
+}
+
+//-----------> product
+.product {
+  .product-item {
+    .image {
+      overflow: hidden !important;
+      img:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  .name {
+    font-size: 15px;
+    font-weight: bold;
+    &-hover {
+      color: $primary-color;
+    }
+  }
 }

@@ -1,24 +1,19 @@
 @use "../../../scss/" as *;
 
 .homepage {
-  .slider {
-    // max-width: 1080px;
-    // flex: 1;
+  .slider-group {
+    .box {
+      grid-column: span 3 / span 3 !important;
+    }
+    .box > div {
+      max-width: 100% !important;
+      max-height: fit-content !important;
+      .carousel-container {
+        max-width: 100% !important;
+        .carousel-item {
+          max-width: 100% !important;
+        }
+      }
+    }
   }
-}
-
-.slick-prev {
-  left: 10px !important;
-}
-.slick-next {
-  right: 10px !important;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: #333 !important;
-}
-
-.slick-slide {
-  // max-width: 1140px !important;
 }
