@@ -16,5 +16,10 @@ header {
         color: #e56266;
       }
     }
+    .header-menu-nav {
+      a.active {
+        color: #fff;
+      }
+    }
   }
 }

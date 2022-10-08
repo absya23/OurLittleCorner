@@ -1,10 +1,12 @@
 import React from "react";
-import Logo from "../../../assets/logo.png";
 import "./Header.scss";
+import Logo from "../../../assets/logo.png";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
     <header className="header w-full">
+      {/* content */}
       <div className="header-content h-[100px] shadow-sm w-full">
         <div className="container flex justify-between items-center h-full">
           {/* left */}
@@ -36,22 +38,22 @@ const Header = () => {
             </div>
             <ul className="research flex gap-x-3 text-note mt-1">
               <li>
-                <a href="#" className="text-sm">
+                <a href="/product" className="text-sm">
                   Đồ chơi xếp hình
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm">
+                <a href="/product" className="text-sm">
                   Hộp bút
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm">
+                <a href="/product" className="text-sm">
                   Túi tote
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm">
+                <a href="/product" className="text-sm">
                   Sổ tay
                 </a>
               </li>
@@ -60,9 +62,9 @@ const Header = () => {
           {/* right */}
           <div className="header--right flex justify-content items-center gap-x-5">
             <div className="flex justify-between items-end gap-x-2 font-bold">
-              <a href="#">Đăng nhập</a>
+              <NavLink to="/user/signin">Đăng nhập</NavLink>
               <span>|</span>
-              <a href="#">Đăng ký</a>
+              <NavLink to="/user/signup">Đăng ký</NavLink>
             </div>
             <div className="relative cart-count cursor-pointer">
               <span className="w-6 h-6 rounded-full bg-third text-white flex justify-center items-center absolute top-0 right-0 translate-x-3 -translate-y-2">
@@ -88,32 +90,49 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {/* navigate */}
       <div className="header-navigation w-full bg-primary">
         <div className="container max-w-[1280px] text-menu">
-          <ul className="flex gap-x-3 justify-start items-center">
+          <ul className="header-menu-nav flex gap-x-3 justify-start items-center">
             <li>
-              <a href="#">TẤT CẢ</a>
+              <NavLink to="/product" activeClassName="active">
+                TẤT CẢ
+              </NavLink>
             </li>
             <li>
-              <a href="#">Set quà</a>
+              <NavLink to="setqua" activeClassName="active">
+                Set quà
+              </NavLink>
             </li>
             <li>
-              <a href="#">Gấu bông và gối</a>
+              <NavLink to="/gaubong" activeClassName="active">
+                Gấu bông và gối
+              </NavLink>
             </li>
             <li>
-              <a href="#">Balo & túi tote</a>
+              <NavLink to="/balovstui" activeClassName="active">
+                Balo & túi tote
+              </NavLink>
             </li>
             <li>
-              <a href="#">Văn phòng phẩm</a>
+              <NavLink to="/vanphongpham" activeClassName="active">
+                Văn phòng phẩm
+              </NavLink>
             </li>
             <li>
-              <a href="#">Phụ kiện thời trang</a>
+              <NavLink to="/phukienthoitrang" activeClassName="active">
+                Phụ kiện thời trang
+              </NavLink>
             </li>
             <li>
-              <a href="#">Đồ chơi</a>
+              <NavLink to="/dochoi" activeClassName="active">
+                Đồ chơi
+              </NavLink>
             </li>
             <li>
-              <a href="#">Trang trí</a>
+              <NavLink to="/trangtri" activeClassName="active">
+                Trang trí
+              </NavLink>
             </li>
           </ul>
         </div>

@@ -35,6 +35,7 @@
 //     max-width: 540px;
 //   }
 // }
+
 // ======== general =========
 
 .container {
@@ -49,6 +50,39 @@
 img {
   object-fit: cover;
   object-position: center;
+}
+
+// ----> scroll
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  // border: 1px solid gray;
+  box-shadow: inset 0 0 5px rgb(207, 207, 207);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  // border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $secondary-color;
+}
+
+// ----> dropdown
+.dropdown-list {
+  overflow: hidden;
+  .item {
+    &:hover {
+      background: $primary-color;
+      color: white;
+    }
+  }
 }
 
 //-----------> product

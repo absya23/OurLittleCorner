@@ -1,0 +1,71 @@
+@use "../../../scss/" as *;
+
+.product-page {
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  // category
+  .product-category {
+    .data-item {
+      overflow: hidden !important;
+    }
+    .data-list.show,
+    .sub-data-list.show {
+      visibility: visible;
+      display: block;
+      // transform: translateY(0);
+      // opacity: 1;
+      // height: auto;
+    }
+    .data-list,
+    .sub-data-list {
+      visibility: hidden;
+      display: none;
+      // transform: translateY(-50%);
+      // opacity: 0;
+      // height: 0;
+      // animation: lineV 1s forwards;
+      // transition: all 0.15s linear;
+      // -webkit-animation: lineV 1s forwards;
+    }
+  }
+  // price-range
+  .price-range {
+    .price-bar {
+      position: relative;
+      .range-handler {
+        width: 7px;
+        height: 12px;
+        background: #a1252c;
+        border: none;
+        margin-left: -4px;
+        cursor: pointer;
+        position: absolute;
+        top: -3px;
+        border-radius: 2px 2px 0 0;
+        &::after {
+          content: "";
+          background-color: #a1252c;
+          position: absolute;
+          bottom: -3px;
+          left: 1px;
+          width: 5px;
+          height: 5px;
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
+}
+
+@keyframes lineV {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+    height: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    height: auto;
+  }
+}
