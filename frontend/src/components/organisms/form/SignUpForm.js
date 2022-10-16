@@ -22,16 +22,16 @@ const SignUpForm = () => {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(validateSchema), mode: "onChange" });
   const onSubmit = (data) => {
-    // gọi API ở đây để check -> sign in
+    // gọi API ở đây để sign up
     console.log({ data });
   };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col w-full items-center"
+      className="flex flex-col items-center w-full"
     >
-      <div className="form-group w-full mb-4">
-        <label htmlFor="username" className="mb-2 inline-block">
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="username" className="inline-block mb-2">
           Tên đăng nhập
         </label>
         <Input
@@ -45,9 +45,64 @@ const SignUpForm = () => {
           <p className="text-sm text-red-500">{errors.username.message}</p>
         )}
       </div>
-      <div className="form-group w-full mb-4">
-        <label htmlFor="password" className="mb-2 inline-block">
-          Nhập mật khẩu
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="name" className="inline-block mb-2">
+          Họ tên
+        </label>
+        <Input
+          id="name"
+          type="name"
+          name="name"
+          placeholder="Nguyễn Minh Vy"
+          control={control}
+        ></Input>
+        {errors.name && (
+          <p className="text-sm text-red-500">{errors.name.message}</p>
+        )}
+      </div>
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="birthd" className="inline-block mb-2">
+          Ngày sinh
+        </label>
+        <Input id="birthd" type="date" name="birthd" control={control}></Input>
+        {errors.birthd && (
+          <p className="text-sm text-red-500">{errors.birthd.message}</p>
+        )}
+      </div>
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="phone" className="inline-block mb-2">
+          Điện thoại
+        </label>
+        <Input
+          id="phone"
+          type="tel"
+          name="phone"
+          placeholder="0522464748"
+          control={control}
+          pattern="(\+84|0)\d{9,10}"
+        ></Input>
+        {errors.phone && (
+          <p className="text-sm text-red-500">{errors.phone.message}</p>
+        )}
+      </div>
+      {/* Tỉnh/ Thành phố ->  Quận/ Huyện*/}
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="address" className="inline-block mb-2">
+          Địa chỉ chi tiết
+        </label>
+        <Input
+          id="address"
+          type="text"
+          name="address"
+          control={control}
+        ></Input>
+        {errors.address && (
+          <p className="text-sm text-red-500">{errors.address.message}</p>
+        )}
+      </div>
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="password" className="inline-block mb-2">
+          Mật khẩu của bạn
         </label>
         <Input
           id="password"
@@ -60,8 +115,23 @@ const SignUpForm = () => {
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
       </div>
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="repassword" className="inline-block mb-2">
+          Nhập lại mật khẩu
+        </label>
+        <Input
+          id="repassword"
+          type="repassword"
+          name="repassword"
+          placeholder="********"
+          control={control}
+        ></Input>
+        {errors.password && (
+          <p className="text-sm text-red-500">{errors.password.message}</p>
+        )}
+      </div>
       <Button
-        className={`${isSubmitting ? "opacity-40" : ""}`}
+        className={`hover:bg-hover ${isSubmitting ? "opacity-40" : ""}`}
         type="submit"
         disabled={isSubmitting}
       >

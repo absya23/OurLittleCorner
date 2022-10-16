@@ -1,25 +1,46 @@
 import React from "react";
 import "./Header.scss";
 import Logo from "../../../assets/logo.png";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import Cart from "../cart/Cart";
+import useHover from "../../../hook/useHover";
+
+const headerNavData = [
+  { id: 1, title: "TẤT CẢ", url: "/product" },
+  { id: 2, title: "Set quà", url: "/setqua" },
+  { id: 3, title: "Gấu bông và gối", url: "/gaubong" },
+  { id: 4, title: "Balo & túi", url: "/balovstui" },
+  { id: 5, title: "Văn phòng phẩm", url: "/vanphongpham" },
+  { id: 6, title: "Phụ kiện thời trang", url: "/phukienthoitrang" },
+  { id: 7, title: "Đồ chơi", url: "/dochoi" },
+  { id: 8, title: "Trang trí", url: "/trangtri" },
+];
 
 const Header = () => {
+  // cart
+  const { hovered: cartHover, nodeRef: cartRef } = useHover();
+
   return (
-    <header className="header w-full">
+    <header className="w-full header">
       {/* content */}
       <div className="header-content h-[100px] shadow-sm w-full">
-        <div className="container flex justify-between items-center h-full">
+        <div className="container flex items-center justify-between h-full">
           {/* left */}
-          <img src={Logo} alt="" className="h-16 header--left" />
+          <Link to="/" className="header--left">
+            <img src={Logo} alt="" className="h-16 cursor-pointer " />
+          </Link>
           {/* center  */}
           <div className="header--center w-[570px] flex flex-col">
-            <div className="h-10 input-group flex justify-between items-center max border-2 border-primary rounded-lg overflow-hidden mt-3">
+            <div className="flex items-center justify-between h-10 mt-3 overflow-hidden border-2 rounded-lg input-group max border-primary">
               <input
                 type="text"
                 placeholder="Tìm kiếm sản phẩm"
                 className="flex-1 px-5 py-2 outline-none"
               />
-              <button className="px-3 h-full bg-primary hover:bg-secondary cursor-pointer outline-none border-0">
+              <button
+                className="h-full px-3 border-0 outline-none cursor-pointer bg-primary hover:bg-secondary"
+                onClick={() => {}}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -36,7 +57,7 @@ const Header = () => {
                 </svg>
               </button>
             </div>
-            <ul className="research flex gap-x-3 text-note mt-1">
+            <ul className="flex mt-1 research gap-x-3 text-note">
               <li>
                 <a href="/product" className="text-sm">
                   Đồ chơi xếp hình
@@ -60,14 +81,14 @@ const Header = () => {
             </ul>
           </div>
           {/* right */}
-          <div className="header--right flex justify-content items-center gap-x-5">
-            <div className="flex justify-between items-end gap-x-2 font-bold">
+          <div className="flex items-center header--right justify-content gap-x-5 relative">
+            <div className="flex items-end justify-between font-bold gap-x-2">
               <NavLink to="/user/signin">Đăng nhập</NavLink>
               <span>|</span>
               <NavLink to="/user/signup">Đăng ký</NavLink>
             </div>
-            <div className="relative cart-count cursor-pointer">
-              <span className="w-6 h-6 rounded-full bg-third text-white flex justify-center items-center absolute top-0 right-0 translate-x-3 -translate-y-2">
+            <div className="relative cursor-pointer cart-count" ref={cartRef}>
+              <span className="absolute top-0 right-0 flex items-center justify-center w-6 h-6 text-white translate-x-3 -translate-y-2 rounded-full bg-third">
                 0
               </span>
               <span>
@@ -86,58 +107,33 @@ const Header = () => {
                   />
                 </svg>
               </span>
+              {cartHover && <Cart></Cart>}
             </div>
           </div>
         </div>
       </div>
       {/* navigate */}
-      <div className="header-navigation w-full bg-primary">
-        <div className="container max-w-[1280px] text-menu">
-          <ul className="header-menu-nav flex gap-x-3 justify-start items-center">
-            <li>
-              <NavLink to="/product" activeClassName="active">
-                TẤT CẢ
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="setqua" activeClassName="active">
-                Set quà
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/gaubong" activeClassName="active">
-                Gấu bông và gối
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/balovstui" activeClassName="active">
-                Balo & túi tote
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/vanphongpham" activeClassName="active">
-                Văn phòng phẩm
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/phukienthoitrang" activeClassName="active">
-                Phụ kiện thời trang
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/dochoi" activeClassName="active">
-                Đồ chơi
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/trangtri" activeClassName="active">
-                Trang trí
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <HeaderNav data={headerNavData}></HeaderNav>
     </header>
+  );
+};
+
+const HeaderNav = ({ data }) => {
+  return (
+    <div className="w-full header-navigation bg-primary">
+      <div className="container max-w-[1280px] text-menu">
+        <ul className="flex items-center justify-start header-menu-nav gap-x-3">
+          {data.length > 0 &&
+            data.map((item, index) => (
+              <li key={index}>
+                <NavLink to={item.url} activeclassname="active">
+                  {item.title}
+                </NavLink>
+              </li>
+            ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

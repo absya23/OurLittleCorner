@@ -7,6 +7,7 @@ const ProductPage = lazy(() =>
 );
 const SignInPage = lazy(() => import("../components/pages/user/SignInPage"));
 const SignUpPage = lazy(() => import("../components/pages/user/SignUpPage"));
+const CartPage = lazy(() => import("../components/pages/cart/CartPage"));
 
 const RouteConfig = () => {
   return (
@@ -16,6 +17,7 @@ const RouteConfig = () => {
         <Route path="/product" element={<ProductPage />}></Route>
         <Route path="/user/signin" element={<SignInPage />}></Route>
         <Route path="/user/signup" element={<SignUpPage />}></Route>
+        <Route path="/cart" element={<CartPage />}></Route>
         <Route path="/test" element={<div>test</div>}></Route>
         <Route path="*" element={<div>Not found</div>}></Route>
       </Routes>

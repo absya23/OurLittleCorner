@@ -52,6 +52,54 @@ img {
   object-position: center;
 }
 
+a.active {
+  background-color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  thead {
+    background-color: #cae6ff;
+  }
+  tbody {
+    background-color: #f0f8fe;
+  }
+
+  tbody:before {
+    line-height: 10px;
+    content: ".";
+    color: #fff;
+    display: block;
+    width: 100%;
+    position: relative;
+    left: -1px;
+    z-index: 1;
+    background: #fff;
+  }
+  tr {
+    border-left: 1px solid #cae6ff;
+    border-right: 1px solid #cae6ff;
+  }
+  td,
+  th {
+    padding: 8px;
+    border-top: 1px solid #cae6ff;
+    border-bottom: 1px solid #cae6ff;
+  }
+  td {
+    text-align: center;
+  }
+}
+
+.break-line-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 // ----> scroll
 ::-webkit-scrollbar {
   width: 10px;

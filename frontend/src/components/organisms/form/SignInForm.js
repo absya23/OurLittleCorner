@@ -29,10 +29,10 @@ const SignInForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col w-full items-center"
+      className="flex flex-col items-center w-full"
     >
-      <div className="form-group w-full mb-4">
-        <label htmlFor="username" className="mb-2 inline-block">
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="username" className="inline-block mb-2">
           Tên đăng nhập
         </label>
         <Input
@@ -46,8 +46,8 @@ const SignInForm = () => {
           <p className="text-sm text-red-500">{errors.username.message}</p>
         )}
       </div>
-      <div className="form-group w-full mb-4">
-        <label htmlFor="password" className="mb-2 inline-block">
+      <div className="w-full mb-4 form-group">
+        <label htmlFor="password" className="inline-block mb-2">
           Nhập mật khẩu
         </label>
         <Input
@@ -62,28 +62,28 @@ const SignInForm = () => {
         )}
       </div>
       <Button
-        className={`${isSubmitting ? "opacity-40" : ""}`}
+        className={`hover:bg-hover ${isSubmitting ? "opacity-40" : ""}`}
         type="submit"
         disabled={isSubmitting}
       >
         ĐĂNG NHẬP
       </Button>
-      <div className="user-footer w-full text-center">
+      <div className="w-full text-center user-footer">
         <Link
           href="/user/getpassword"
-          className="my-3 inline-block text-sm hover:text-primary"
+          className="inline-block my-3 text-sm hover:text-primary"
         >
           Quên mật khẩu
         </Link>
-        <p className="text-lg mb-4">Hoặc đăng nhập với</p>
+        <p className="mb-4 text-lg">Hoặc đăng nhập với</p>
         <div className="logFb w-full bg-[#2e4b88] mb-2">
-          <a href="/" className="inline-block py-2 w-full text-white text-sm">
+          <a href="/" className="inline-block w-full py-2 text-sm text-white">
             <i class="fa-brands fa-facebook-f mr-2"></i>
             <span>Đăng nhập bằng facebook</span>
           </a>
         </div>
         <div className="logGg w-full bg-[#ea4235] mb-4 text-sm">
-          <a href="/" className="inline-block py-2 w-full text-white">
+          <a href="/" className="inline-block w-full py-2 text-white">
             <i class="fa-brands fa-google mr-2"></i>
             <span>Đăng nhập Google</span>
           </a>
