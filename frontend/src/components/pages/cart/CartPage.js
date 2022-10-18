@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { productData } from "../../../data/FakeData";
 import Button from "../../atoms/Button";
-import { ProductItemMini } from "../../molecules/productItem/ProductItem";
+import ProductSlide from "../../organisms/product/ProductSlide";
 
 const CartPage = () => {
   const navigate = useNavigate();
+  const productRecently = productData;
   return (
     <div className="cart-page">
       <div className="container my-10">
@@ -38,10 +40,7 @@ const CartPage = () => {
             Các sản phẩm đã xem
           </h4>
           <div className="w-full flex gap-x-2">
-            <ProductItemMini></ProductItemMini>
-            <ProductItemMini></ProductItemMini>
-            <ProductItemMini></ProductItemMini>
-            <ProductItemMini></ProductItemMini>
+            <ProductSlide data={productRecently}></ProductSlide>
           </div>
         </section>
       </div>

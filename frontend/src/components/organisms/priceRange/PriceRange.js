@@ -3,7 +3,7 @@ import PartTitle from "../../atoms/PartTitle";
 
 const PriceRange = () => {
   return (
-    <div class="price-range">
+    <div className="price-range">
       <PartTitle title="GIÁ" className="uppercase"></PartTitle>
       <div className="w-full h-[1px] bg-primary mb-3"></div>
       <div className="price-filter">

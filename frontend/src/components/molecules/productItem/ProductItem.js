@@ -1,7 +1,12 @@
 import React from "react";
 import "./ProductItem.scss";
 
-const ProductItem = ({ tag = true }) => {
+const ProductItem = ({
+  tag = true,
+  title = "EMPTY",
+  price = "EMPTY",
+  image = "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
+}) => {
   return (
     <div className="product-item cursor-pointer">
       <div className="relative mb-2 image">
@@ -11,10 +16,7 @@ const ProductItem = ({ tag = true }) => {
           </span>
         )}
 
-        <img
-          src="https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20220922/22090127_thumb.jpg"
-          alt=""
-        />
+        <img src={image} alt="" />
         <div className="product-action w-full bg-primary opacity-70 flex items-center justify-center gap-x-2 absolute left-0 bottom-0 py-1">
           <div className="heart cursor-pointer text-white">
             <svg
@@ -50,22 +52,21 @@ const ProductItem = ({ tag = true }) => {
           </div>
         </div>
       </div>
-      <h3 className="mb-3 name">
-        Bình nước giữ nhiệt Rabbit all the best có tai 320ml
-      </h3>
-      <div className="font-extrabold price text-[17px]">150.000đ</div>
+      <h3 className="mb-3 name">{title}</h3>
+      <div className="font-extrabold price text-[17px]">{price}đ</div>
     </div>
   );
 };
 
-export const ProductItemMini = () => {
+export const ProductItemMini = ({
+  title = "EMPTY",
+  price = "EMPTY",
+  image = "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
+}) => {
   return (
     <div className="product-item cursor-pointer">
       <div className="relative mb-2 image">
-        <img
-          src="https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20220922/22090127_thumb.jpg"
-          alt=""
-        />
+        <img src={image} alt="" />
         <div className="product-action w-full bg-primary opacity-70 flex items-center justify-center gap-x-2 absolute left-0 bottom-0 py-1">
           <div className="heart cursor-pointer text-white">
             <svg
@@ -101,10 +102,8 @@ export const ProductItemMini = () => {
           </div>
         </div>
       </div>
-      <h3 className="mb-3 name">
-        Bình nước giữ nhiệt Rabbit all the best có tai 320ml
-      </h3>
-      <div className="font-extrabold price text-[17px]">150.000đ</div>
+      <h3 className="mb-3 name">{title}</h3>
+      <div className="font-extrabold price text-[17px]">{price}đ</div>
     </div>
   );
 };

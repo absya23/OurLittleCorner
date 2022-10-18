@@ -81,13 +81,16 @@ const Header = () => {
             </ul>
           </div>
           {/* right */}
-          <div className="flex items-center header--right justify-content gap-x-5 relative">
+          <div className="relative flex items-center header--right justify-content gap-x-5">
             <div className="flex items-end justify-between font-bold gap-x-2">
               <NavLink to="/user/signin">Đăng nhập</NavLink>
               <span>|</span>
               <NavLink to="/user/signup">Đăng ký</NavLink>
             </div>
-            <div className="relative cursor-pointer cart-count" ref={cartRef}>
+            <div
+              className="relative mx-2 cursor-pointer cart-count"
+              ref={cartRef}
+            >
               <span className="absolute top-0 right-0 flex items-center justify-center w-6 h-6 text-white translate-x-3 -translate-y-2 rounded-full bg-third">
                 0
               </span>

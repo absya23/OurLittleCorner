@@ -25,7 +25,7 @@ const cartData = [
 const Cart = () => {
   const navigate = useNavigate();
   return (
-    <div className="cart w-[350px] bg-white rounded shadow-lg flex flex-col absolute top-full -right-4 z-[999999] p-4 cursor-default">
+    <div className="cart w-[350px] bg-white rounded shadow-xl flex flex-col absolute top-full -right-5 z-[999999] p-4 cursor-default">
       <ul className="flex flex-col cart-list gap-y-3">
         {cartData.length === 0 ? (
           <EmptyCart></EmptyCart>
@@ -106,7 +106,7 @@ const CartItem = ({ title, image, price, quantity }) => {
           </span>
         </div>
       </div>
-      <i className="fa-solid fa-trash w-3 hover:text-primary cursor-pointer p-3"></i>
+      <i className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary"></i>
     </li>
   );
 };
