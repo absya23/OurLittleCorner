@@ -10,14 +10,14 @@ import "./ProductPage.scss";
 const ProductPage = () => {
   const dataProduct = productData;
   return (
-    <div className="product-page">
-      <div className="container mt-5 mb-5 flex gap-x-5">
-        <div className="left w-1/4">
+    <div className="mb-20 product-page">
+      <div className="container flex mt-5 mb-5 gap-x-5">
+        <div className="w-1/4 left">
           <ProductCategory></ProductCategory>
           <PriceRange></PriceRange>
         </div>
-        <div className="content w-3/4">
-          <div className="content-head flex w-full mb-2">
+        <div className="w-3/4 content">
+          <div className="flex w-full mb-2 content-head">
             <div className="flex-1">
               <PartTitle title="Sản phẩm"></PartTitle>
               <div className="w-full h-[1px] bg-primary mb-3"></div>

@@ -128,7 +128,7 @@ const HeaderNav = ({ data }) => {
         <ul className="flex items-center justify-start header-menu-nav gap-x-3">
           {data.length > 0 &&
             data.map((item, index) => (
-              <li key={index}>
+              <li key={index} className="text-lg">
                 <NavLink to={item.url} activeclassname="active">
                   {item.title}
                 </NavLink>

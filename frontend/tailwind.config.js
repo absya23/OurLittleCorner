@@ -3,12 +3,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        menu: "#8A4762",
+        menu: "#03045e",
         note: "#1D2129",
-        hover: "#e56266",
-        primary: "#ffb0bd",
-        secondary: "#fd8fa1",
-        third: "#a1252c",
+        hover: "#00b4d8",
+        primary: "#81ddec",
+        secondary: "#38bfd8",
+        third: "#0077b6",
       },
     },
   },

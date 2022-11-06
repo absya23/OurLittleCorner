@@ -1,5 +1,9 @@
+import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import React from "react";
 import Slider from "react-slick";
+import { ProductItemImage } from "../productItem/ProductItem";
+import "./CarouselCenter.scss";
+import "@splidejs/react-splide/css";
 
 const data = [
   {
@@ -47,24 +51,44 @@ const data = [
 ];
 
 const CarouselCenter = () => {
-  const settings = {
-    className: "center",
-    centerMode: true,
-    infinite: true,
-    centerPadding: "60px",
-    slidesToShow: 3,
-    speed: 500,
-  };
   return (
-    <div>
-      <Slider {...settings}>
-        {data.length > 0 &&
-          data.map((item) => (
-            <div key={item.id}>
-              <img src={item.image} alt="" />
-            </div>
-          ))}
-      </Slider>
+    <div className="w-full product-slide h-[300px]">
+      <Splide
+        hasTrack={false}
+        options={{
+          // fixedWidth: "30%",
+          // fixedHeight: "160px",
+          type: "loop",
+          perPage: 3,
+          focus: "center",
+          omitEnd: true,
+          gap: "10px",
+          autoScroll: {
+            speed: 2,
+          },
+          classes: {},
+        }}
+      >
+        <SplideTrack>
+          {data.length > 0 &&
+            data.map((item, index) => (
+              <SplideSlide key={index}>
+                <ProductItemImage
+                  name={item?.name}
+                  image={item?.image}
+                ></ProductItemImage>
+              </SplideSlide>
+            ))}
+        </SplideTrack>
+        <div className="splide__arrows">
+          <button className="splide__arrow splide__arrow--prev">
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          <button className="splide__arrow splide__arrow--next">
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </Splide>
     </div>
   );
 };

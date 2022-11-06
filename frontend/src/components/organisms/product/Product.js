@@ -23,6 +23,7 @@ const Product = ({ children, title, length }) => {
                 .map((item, index) => (
                   <ProductItem
                     key={index}
+                    id={item?.id}
                     title={item?.title}
                     price={item?.price}
                     image={item?.image}
@@ -34,6 +35,7 @@ const Product = ({ children, title, length }) => {
                 .map((item, index) => (
                   <ProductItem
                     key={index}
+                    id={item?.id}
                     title={item?.title}
                     price={item?.price}
                     image={item?.image}

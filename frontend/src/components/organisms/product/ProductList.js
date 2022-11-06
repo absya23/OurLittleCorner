@@ -14,7 +14,6 @@ const ProductList = ({ data }) => {
   useEffect(() => {
     // Fetch items from another resources.
     const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     setCurrentItems(data?.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(data?.length / itemsPerPage));
   }, [itemOffset, itemsPerPage]);
@@ -29,11 +28,12 @@ const ProductList = ({ data }) => {
   };
   return (
     <>
-      <div className="product-list grid grid-cols-4 gap-5 mb-20">
+      <div className="grid grid-cols-4 gap-5 mb-20 product-list">
         {currentItems?.length > 0 &&
           currentItems?.map((item, index) => (
             <ProductItem
               key={index}
+              id={item?.id}
               title={item?.title}
               price={item?.price}
               image={item?.image}

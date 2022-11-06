@@ -27,6 +27,7 @@ const ProductSlide = ({ data }) => {
             data.slice(0, 5).map((item, index) => (
               <SplideSlide key={index}>
                 <ProductItemMini
+                  id={item?.id}
                   title={item?.title}
                   price={item?.price}
                   image={item?.image}

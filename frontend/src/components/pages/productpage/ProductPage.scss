@@ -2,6 +2,9 @@
 
 .product-page {
   transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  h2 {
+    font-size: 20px;
+  }
   // category
   .product-category {
     .data-item {
@@ -34,7 +37,7 @@
       .range-handler {
         width: 7px;
         height: 12px;
-        background: #a1252c;
+        background: $third-color;
         border: none;
         margin-left: -4px;
         cursor: pointer;
@@ -43,7 +46,7 @@
         border-radius: 2px 2px 0 0;
         &::after {
           content: "";
-          background-color: #a1252c;
+          background-color: $third-color;
           position: absolute;
           bottom: -3px;
           left: 1px;
