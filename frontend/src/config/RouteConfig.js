@@ -18,6 +18,7 @@ const RouteConfig = () => {
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/product" element={<ProductPage />}></Route>
+        {/* <Route path="/product/:title" element={<ProductPage />}></Route> */}
         <Route path="/user/signin" element={<SignInPage />}></Route>
         <Route path="/user/signup" element={<SignUpPage />}></Route>
         <Route path="/cart" element={<CartPage />}></Route>

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { productData } from "../../../data/FakeData";
 import Button from "../../atoms/Button";
+import InputCombo from "../../molecules/InputCombo";
 import ProductSlide from "../../organisms/product/ProductSlide";
 
 const CartPage = () => {
@@ -28,7 +29,7 @@ const CartPage = () => {
               Tiếp tục mua sắm
             </Button>
             <Button
-              className="w-auto px-5 rounded-3xl bg-white text-lg border border-primary text-primary hover:bg-primary hover:text-white normal-case"
+              className="w-auto px-5 rounded-3xl bg-white text-lg border border-primary text-primary hover:bg-secondary hover:text-white normal-case"
               onClick={() => navigate("/cart/checkout")}
             >
               Thanh toán
@@ -91,39 +92,7 @@ const CartPreviewList = () => {
             </td>
             <td>
               <div className="flex w-full justify-center gap-x-1">
-                <span className="cursor-pointer minus p-1 flex justify-center items-center border border-[#dee2e6] bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M18 12H6"
-                    />
-                  </svg>
-                </span>
-                <span className="px-2">1</span>
-                <span className="cursor-pointer plus p-1 flex justify-center items-center border border-[#dee2e6] bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v12m6-6H6"
-                    />
-                  </svg>
-                </span>
+                <InputCombo className="items-center"></InputCombo>
               </div>
             </td>
             <td>
@@ -149,39 +118,7 @@ const CartPreviewList = () => {
             </td>
             <td>
               <div className="flex w-full justify-center gap-x-1">
-                <span className="cursor-pointer minus p-1 flex justify-center items-center border border-[#dee2e6] bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M18 12H6"
-                    />
-                  </svg>
-                </span>
-                <span className="px-2">1</span>
-                <span className="cursor-pointer plus p-1 flex justify-center items-center border border-[#dee2e6] bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v12m6-6H6"
-                    />
-                  </svg>
-                </span>
+                <InputCombo className="items-center"></InputCombo>
               </div>
             </td>
             <td>

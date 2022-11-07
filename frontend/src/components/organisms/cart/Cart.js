@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../atoms/Button";
 import emptyCart from "../../../assets/emptyCart.png";
+import InputCombo from "../../molecules/InputCombo";
 
 const cartData = [
   {
@@ -53,7 +54,7 @@ const Cart = () => {
         <Fragment>
           <div className="flex items-center justify-between pt-4 pb-3">
             <span>Thành tiền</span>
-            <span className="text-[#e53b37] font-bold">500.000đ</span>
+            <span className="text-hot font-bold">500.000đ</span>
           </div>
           <Button
             className="w-full rounded-md bg-primary hover:bg-hover"
@@ -73,9 +74,10 @@ const CartItem = ({ title, image, price, quantity }) => {
       <img src={image} alt="" className="w-[88px] h-[88px] mr-3" />
       <div className="flex-1 item-info">
         <h4 className="font-bold break-line-2">{title}</h4>
-        <p className="font-bold price text-[#e53b37]">Đơn giá: {price}</p>
+        <p className="font-bold price text-hot">Đơn giá: {price}</p>
         <div className="flex items-center quantity gap-x-1">
-          <span className="cursor-pointer minus p-1 flex justify-center items-center border border-[#dee2e6]">
+          <InputCombo></InputCombo>
+          {/* <span className="cursor-pointer minus p-1 flex justify-center items-center border border-[#dee2e6]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -103,7 +105,7 @@ const CartItem = ({ title, image, price, quantity }) => {
                 d="M12 6v12m6-6H6"
               />
             </svg>
-          </span>
+          </span> */}
         </div>
       </div>
       <i className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary"></i>

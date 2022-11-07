@@ -5,7 +5,7 @@ export const productData = [
     price: 160000,
     stock: 15520,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221013/IMG_3369.JPG",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -19,7 +19,7 @@ export const productData = [
     price: 160000,
     stock: 100,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221013/IMG_3337.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -33,7 +33,7 @@ export const productData = [
     price: 270000,
     stock: 3200,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221012/Set_4b.jpeg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -57,7 +57,7 @@ export const productData = [
     price: 170000,
     stock: 52,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221013/IMG_3374.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -71,7 +71,7 @@ export const productData = [
     price: 270000,
     stock: 12,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221012/Set_7.jpeg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -95,7 +95,7 @@ export const productData = [
     price: 140000,
     stock: 10,
     image: "https://bucket.nhanh.vn/store/7534/ps/20221004/22093331.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -109,7 +109,7 @@ export const productData = [
     price: 220000,
     stock: 10,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220706/22060697_1.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -124,7 +124,7 @@ export const productData = [
     stock: 10,
     image:
       "https://bucket.nhanh.vn/store/7534/ps/20221012/B4F95F39_A832_414F_BC3F_AC7667524647.jpeg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -153,7 +153,7 @@ export const productData = [
     price: 140000,
     stock: 10,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220921/22093121.JPG",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -172,7 +172,7 @@ export const productData = [
     price: 160000,
     stock: 10,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220920/22093008.JPG",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -186,7 +186,7 @@ export const productData = [
     price: 160000,
     stock: 10,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220728/22070492t.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -222,7 +222,7 @@ export const productData = [
     price: 190000,
     stock: 11,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220724/22073219.JPG",
-    description: [
+    imagelist: [
       {
         id: 1,
         image:
@@ -250,7 +250,7 @@ export const productData = [
     price: 160000,
     stock: 11,
     image: "https://bucket.nhanh.vn/store/7534/ps/20220727/22073132x.jpg",
-    description: [
+    imagelist: [
       {
         id: 1,
         image: "https://bucket.nhanh.vn/store/7534/ps/20220723/22073132.JPG",

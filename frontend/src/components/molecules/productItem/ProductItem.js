@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { removeVietnameseTones } from "../../../handlers/handlerConvertUrl";
+import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
 import "./ProductItem.scss";
 
 const ProductItem = ({
+  id = 1,
   tag = true,
   title = "EMPTY",
   price = "EMPTY",
@@ -23,7 +24,9 @@ const ProductItem = ({
         <img
           src={image}
           alt=""
-          onClick={() => navigate(convertTitle, { state: { id: 1 } })}
+          onClick={() =>
+            navigate(`/${convertTitle}`, { state: { id }, replace: true })
+          }
         />
         <div className="absolute bottom-0 left-0 flex items-center justify-center w-full py-1 product-action bg-primary opacity-70 gap-x-2">
           <div className="text-white cursor-pointer heart">
@@ -62,7 +65,7 @@ const ProductItem = ({
       </div>
       <div
         className="flex flex-col"
-        onClick={() => navigate(convertTitle, { state: { id: 1 } })}
+        onClick={() => navigate(`/${convertTitle}`, { state: { id } })}
       >
         <h3 className="mb-3 name">{title}</h3>
         <div className="font-extrabold price text-[17px]">{price}đ</div>
@@ -72,6 +75,7 @@ const ProductItem = ({
 };
 
 export const ProductItemMini = ({
+  id = 1,
   title = "EMPTY",
   price = "EMPTY",
   image = "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
@@ -84,7 +88,7 @@ export const ProductItemMini = ({
         <img
           src={image}
           alt=""
-          onClick={() => navigate(convertTitle, { state: { id: 1 } })}
+          onClick={() => navigate(`/${convertTitle}`, { state: { id } })}
         />
         <div className="absolute bottom-0 left-0 flex items-center justify-center w-full py-1 product-action bg-primary opacity-70 gap-x-2">
           <div className="text-white cursor-pointer heart">
@@ -123,7 +127,7 @@ export const ProductItemMini = ({
       </div>
       <div
         className="flex flex-col"
-        onClick={() => navigate(convertTitle, { state: { id: 1 } })}
+        onClick={() => navigate(`/${convertTitle}`, { state: { id } })}
       >
         <h3 className="mb-3 name break-line-2">{title}</h3>
         <div className="font-extrabold price text-[17px]">{price}đ</div>
