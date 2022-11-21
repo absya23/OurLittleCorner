@@ -6,11 +6,11 @@ import RouteConfig from "./config/RouteConfig";
 function App() {
   return (
     <>
-      <Header></Header>
+      {/* <Header></Header> */}
       <Suspense fallback={<></>}>
         <RouteConfig></RouteConfig>
       </Suspense>
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </>
   );
 }
