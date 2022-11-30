@@ -3,47 +3,42 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../atoms/Button";
 import emptyCart from "../../../assets/emptyCart.png";
 import InputCombo from "../../molecules/InputCombo";
-
-const cartData = [
-  {
-    id: 1,
-    image:
-      "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
-    title: "Túi đeo vải I found a heaven",
-    price: "140.000đ",
-    quantity: 1,
-  },
-  {
-    id: 2,
-    image:
-      "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/Set_13_20__1__thumb.jpeg",
-    title: "Túi đeo vải I found a heaven Túi đeo vải I found a heaven",
-    price: "2.140.000đ",
-    quantity: 10,
-  },
-];
+import { useCart } from "../../../context/cartContext";
+import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
+import handleFormatNumber from "../../../handlers/handleFormatNumber";
 
 const Cart = () => {
   const navigate = useNavigate();
+  // get data from cart context
+  const cartContext = useCart();
+
+  // -----------------------------------------------------
+  // total money --> fix auto rerendering when quantity changes
+  // const [total, setTotal] = useState(handleCalTotal(cartContext?.cart || []));
+  // useEffect(() => {
+  //   setTotal(handleCalTotal(cartContext?.cart || []));
+  // }, []);
   return (
     <div className="cart w-[350px] bg-white rounded shadow-xl flex flex-col absolute top-full -right-5 z-[999999] p-4 cursor-default">
       <ul className="flex flex-col cart-list gap-y-3">
-        {cartData.length === 0 ? (
+        {cartContext?.cart.length === 0 ? (
           <EmptyCart></EmptyCart>
         ) : (
-          cartData.map((item) => (
+          cartContext?.cart.map((item) => (
             <CartItem
               key={item.id}
+              id={item.id}
               title={item.title}
               price={item.price}
               quantity={item.quantity}
+              stock={item.stock}
               image={item.image}
             ></CartItem>
           ))
         )}
       </ul>
 
-      {cartData.length === 0 ? (
+      {cartContext?.cart.length === 0 ? (
         <Button
           className="w-full rounded-md bg-primary hover:bg-hover"
           onClick={() => navigate("/product")}
@@ -54,7 +49,9 @@ const Cart = () => {
         <Fragment>
           <div className="flex items-center justify-between pt-4 pb-3">
             <span>Thành tiền</span>
-            <span className="text-hot font-bold">500.000đ</span>
+            <span className="text-hot font-bold">
+              {handleFormatNumber(cartContext?.totalMoney())}đ
+            </span>
           </div>
           <Button
             className="w-full rounded-md bg-primary hover:bg-hover"
@@ -68,47 +65,42 @@ const Cart = () => {
   );
 };
 
-const CartItem = ({ title, image, price, quantity }) => {
+const CartItem = ({ id, title, image, price, quantity, stock }) => {
+  const navigate = useNavigate();
+  const cartContext = useCart();
+  const removeProductFromCart = cartContext?.removeProductFromCart || null;
   return (
     <li className="flex items-center justify-between cursor-pointer cart-item">
-      <img src={image} alt="" className="w-[88px] h-[88px] mr-3" />
+      <img
+        src={image}
+        alt=""
+        className="w-[88px] h-[88px] mr-3 cursor-pointer"
+        onClick={() =>
+          navigate(`/${removeVietnameseTones(title)}`, {
+            state: { id },
+          })
+        }
+      />
       <div className="flex-1 item-info">
-        <h4 className="font-bold break-line-2">{title}</h4>
+        <h4
+          className="font-bold break-line-2 cursor-pointer hover:text-secondary"
+          onClick={() =>
+            navigate(`/${removeVietnameseTones(title)}`, {
+              state: { id },
+            })
+          }
+        >
+          {title}
+        </h4>
         <p className="font-bold price text-hot">Đơn giá: {price}</p>
         <div className="flex items-center quantity gap-x-1">
-          <InputCombo></InputCombo>
-          {/* <span className="cursor-pointer minus p-1 flex justify-center items-center border border-[#dee2e6]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
-            </svg>
-          </span>
-          <span className="px-2">{quantity}</span>
-          <span className="cursor-pointer plus p-1 flex justify-center items-center border border-[#dee2e6]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6v12m6-6H6"
-              />
-            </svg>
-          </span> */}
+          <InputCombo type="CART" quantity={quantity} max={stock}></InputCombo>
         </div>
       </div>
-      <i className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary"></i>
+      <i
+        className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary"
+        onClick={removeProductFromCart.bind(this, id)}
+      ></i>
     </li>
   );
 };
