@@ -5,7 +5,7 @@ import Sidebar from "../../organisms/sidebar/Sidebar";
 import "./ManageSlide.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
-// import "bootstrap/dist/css/bootstrap.css";
+import Toolbar from "../../organisms/toolbar/Toolbar";
 const DATA = [
   {
     image: "",
@@ -44,13 +44,7 @@ const ManageSlide = () => {
     <div className="manage-slide">
       <Sidebar />
       <div className="content">
-        <div className="toolbar">
-          <h2>QUẢN LÝ SLIDE</h2>
-          <Button variant="outline-info" onClick={handleAddShow}>
-            <i class="bi bi-plus-lg"></i>
-            Thêm
-          </Button>{" "}
-        </div>
+        <Toolbar name="QUẢN LÝ SLIDE" handleAddShow={handleAddShow}></Toolbar>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -87,17 +81,17 @@ const ManageSlide = () => {
         </Table>
       </div>
       <CustomModal
-        type="add-catalog"
+        type="add-slide"
         show={addShow}
         handleClose={handleAddClose}
       />
       <CustomModal
-        type="edit-catalog"
+        type="edit-slide"
         show={editShow}
         handleClose={handleEditClose}
       />
       <CustomModal
-        type="delete-catalog"
+        type="delete-slide"
         show={deleteShow}
         handleClose={handleDeleteClose}
       />

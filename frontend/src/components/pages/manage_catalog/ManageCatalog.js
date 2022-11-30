@@ -5,7 +5,8 @@ import Sidebar from "../../organisms/sidebar/Sidebar";
 import "./ManageCatalog.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
-// import "bootstrap/dist/css/bootstrap.css";
+import Toolbar from "../../organisms/toolbar/Toolbar";
+
 const DATA = [
   {
     name: "bút chì",
@@ -49,13 +50,10 @@ const ManageCatalog = () => {
     <div className="manage-catalog">
       <Sidebar />
       <div className="content">
-        <div className="toolbar">
-          <h2>QUẢN LÝ DANH MỤC</h2>
-          <Button variant="outline-info" onClick={handleAddShow}>
-            <i class="bi bi-plus-lg"></i>
-            Thêm
-          </Button>{" "}
-        </div>
+        <Toolbar
+          name="QUẢN LÝ DANH MỤC"
+          handleAddShow={handleAddShow}
+        ></Toolbar>
         <Table striped bordered hover>
           <thead>
             <tr>
