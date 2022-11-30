@@ -47,7 +47,6 @@ const RouteConfig = () => {
         </Route>
         <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
         <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>
-        <Route path="/admin/manage-coupon" element={<ManageCoupon />}></Route>
         <Route path="/admin/manage-order" element={<ManageOrder />}></Route>
         <Route path="/admin/manage-product" element={<ManageProduct />}></Route>
         <Route
