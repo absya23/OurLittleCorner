@@ -21,20 +21,9 @@
         ]
     },
     {
-        "title": "Quản lý bán hàng",
+        "title": "Quản lý đơn hàng",
         "icon": "bi-cash",
-        "childrens": [
-            {
-                "title": "Quản lý đơn hàng",
-                "icon": "bi-receipt",
-                "path": "/admin/manage-order"
-            },
-            {
-                "title": "Quản lý khuyến mãi",
-                "icon": "bi-bookmarks-fill",
-                "path": "/admin/manage-coupon"
-            }
-        ]
+        "path": "/admin/manage-order"
     },
     {
         "title": "Quản lý slider",

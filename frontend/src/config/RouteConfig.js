@@ -17,9 +17,6 @@ const CartPage = lazy(() => import("../components/pages/cart/CartPage"));
 const ManageCatalog = lazy(() =>
   import("../components/pages/manage_catalog/ManageCatalog")
 );
-const ManageCoupon = lazy(() =>
-  import("../components/pages/manage_coupon/ManageCoupon")
-);
 const ManageOrder = lazy(() =>
   import("../components/pages/manage_order/ManageOrder")
 );
@@ -50,7 +47,6 @@ const RouteConfig = () => {
         </Route>
         <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
         <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>
-        <Route path="/admin/manage-coupon" element={<ManageCoupon />}></Route>
         <Route path="/admin/manage-order" element={<ManageOrder />}></Route>
         <Route path="/admin/manage-product" element={<ManageProduct />}></Route>
         <Route

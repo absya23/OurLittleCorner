@@ -5,7 +5,8 @@ import Sidebar from "../../organisms/sidebar/Sidebar";
 import "./ManageProductType.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
-// import "bootstrap/dist/css/bootstrap.css";
+import Toolbar from "../../organisms/toolbar/Toolbar";
+
 const DATA = [
   {
     name: "bút chì",
@@ -48,18 +49,17 @@ const ManageProductType = () => {
     <div className="manage-product-type">
       <Sidebar />
       <div className="content">
-        <div className="toolbar">
-          <h2>QUẢN LÝ LOẠI SẢN PHẨM</h2>
-          <Button variant="outline-info" onClick={handleAddShow}>
-            <i class="bi bi-plus-lg"></i>
-            Thêm
-          </Button>{" "}
-        </div>
+        <Toolbar
+          name="QUẢN LÝ LOẠI SẢN PHẨM"
+          handleAddShow={handleAddShow}
+        ></Toolbar>
+
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>ID</th>
               <th>Tên loại sản phẩm</th>
+              <th>Danh mục</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -69,6 +69,7 @@ const ManageProductType = () => {
                 <tr>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
+                  <td>{item.type}</td>
                   <td>
                     <Button
                       variant="outline-success"
@@ -89,17 +90,17 @@ const ManageProductType = () => {
         </Table>
       </div>
       <CustomModal
-        type="add-catalog"
+        type="add-product-type"
         show={addShow}
         handleClose={handleAddClose}
       />
       <CustomModal
-        type="edit-catalog"
+        type="edit-product-type"
         show={editShow}
         handleClose={handleEditClose}
       />
       <CustomModal
-        type="delete-catalog"
+        type="delete-product-type"
         show={deleteShow}
         handleClose={handleDeleteClose}
       />

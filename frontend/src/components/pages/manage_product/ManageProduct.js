@@ -5,7 +5,8 @@ import Sidebar from "../../organisms/sidebar/Sidebar";
 import "./ManageProduct.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
-// import "bootstrap/dist/css/bootstrap.css";
+import Toolbar from "../../organisms/toolbar/Toolbar";
+
 const DATA = [
   {
     name: "bút chì",
@@ -77,13 +78,11 @@ const ManageProduct = () => {
     <div className="manage-product">
       <Sidebar />
       <div className="content">
-        <div className="toolbar">
-          <h2>QUẢN LÝ SẢN PHẨM</h2>
-          <Button variant="outline-info" onClick={handleAddShow}>
-            <i class="bi bi-plus-lg"></i>
-            Thêm
-          </Button>{" "}
-        </div>
+        <Toolbar
+          name="QUẢN LÝ SẢN PHẨM"
+          handleAddShow={handleAddShow}
+        ></Toolbar>
+
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -93,7 +92,6 @@ const ManageProduct = () => {
               <th>Giá</th>
               <th>Ảnh</th>
               <th>Mô tả</th>
-              <th>Đã bán</th>
               <th>Còn lại</th>
               <th>Thao tác</th>
             </tr>
@@ -108,7 +106,6 @@ const ManageProduct = () => {
                   <td>{item.price}</td>
                   <td>{item.image}</td>
                   <td>{item.description}</td>
-                  <td>{item.sold}</td>
                   <td>{item.left}</td>
                   <td>
                     <Button
@@ -130,7 +127,7 @@ const ManageProduct = () => {
         </Table>
       </div>
       <CustomModal
-        type="add-catalog"
+        type="add-product"
         show={addShow}
         handleClose={handleAddClose}
       />
@@ -140,7 +137,7 @@ const ManageProduct = () => {
         handleClose={handleEditClose}
       />
       <CustomModal
-        type="delete-catalog"
+        type="delete-product"
         show={deleteShow}
         handleClose={handleDeleteClose}
       />

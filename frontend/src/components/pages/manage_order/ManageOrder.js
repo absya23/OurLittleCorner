@@ -5,7 +5,8 @@ import Sidebar from "../../organisms/sidebar/Sidebar";
 import "./ManageOrder.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
-// import "bootstrap/dist/css/bootstrap.css";
+import Toolbar from "../../organisms/toolbar/Toolbar";
+
 const DATA = [
   {
     username: "Nguyễn Văn A",
@@ -66,20 +67,18 @@ const ManageOrder = () => {
     <div className="manage-order">
       <Sidebar />
       <div className="content">
-        <div className="toolbar">
-          <h2>QUẢN LÝ ĐƠN HÀNG</h2>
-          <Button variant="outline-info" onClick={handleAddShow}>
-            <i class="bi bi-plus-lg"></i>
-            Thêm
-          </Button>{" "}
-        </div>
+        <Toolbar
+          name="QUẢN LÝ ĐƠN HÀNG"
+          handleAddShow={handleAddShow}
+        ></Toolbar>
+
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>ID</th>
               <th>Tên KH</th>
               <th>SĐT</th>
-              <th>Tỏng tiền</th>
+              <th>Tổng tiền</th>
               <th>Ngày tạo</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
@@ -125,7 +124,7 @@ const ManageOrder = () => {
         handleClose={handleEditClose}
       />
       <CustomModal
-        type="delete-catalog"
+        type="delete-order"
         show={deleteShow}
         handleClose={handleDeleteClose}
       />

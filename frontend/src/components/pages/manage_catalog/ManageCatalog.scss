@@ -8,14 +8,6 @@
         flex: 1;
         flex-direction: column;
         padding-left: 10px;
-        .toolbar {
-            display: flex;
-            background-color: $primary-color;
-            padding: 20px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            color: $third-color;
-        }
     }
     td, th {
         text-align: center;
