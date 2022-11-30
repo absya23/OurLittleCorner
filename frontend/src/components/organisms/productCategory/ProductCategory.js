@@ -9,6 +9,7 @@ const data = [
     submenu: [
       { id: "1.1", name: "Set quà yêu thương", link: "/" },
       { id: "1.2", name: "Hoa số lượng lớn", link: "/" },
+      6,
     ],
   },
   {

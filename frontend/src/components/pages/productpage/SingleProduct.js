@@ -9,6 +9,7 @@ import InputCombo from "../../molecules/InputCombo";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import "./SingleProduct.scss";
+import { useCart } from "../../../context/cartContext";
 
 const SingleProduct = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const SingleProduct = () => {
   const productId = data.state?.id;
   const product = handleGetProductById(productData, productId);
   const productPrice = handleFormatNumber(Number(product?.price) || 0);
+  // ------------------------------------------------------------------
+  // chương trình giảm giá ---> cần fix để đồng bộ với sản phẩm trong giỏ hàng
   const discount = 0.8;
   const productPriceCurrent = handleFormatNumber(
     Number(product?.price) * discount
@@ -26,7 +29,7 @@ const SingleProduct = () => {
     product?.image || listImages[0]
   );
   const variants = product?.variants || [];
-  const numberOfVariants = variants.length === 0 ? 1 : variants.length;
+  // const numberOfVariants = variants.length === 0 ? 1 : variants.length;
   // const imageVariants = variants.length === 0 ? [product?.image] : [];
   const [itemActive, setItemActive] = useState(1);
 
@@ -41,6 +44,24 @@ const SingleProduct = () => {
     if (e.target.dataset.id) {
       setItemActive(parseInt(e.target.dataset.id) + 1);
     }
+  };
+
+  const cartContext = useCart();
+  const [quantity, setQuantity] = useState(1);
+
+  // thêm vào giỏ hàng
+  const handleAddToCart = () => {
+    const data = {
+      id: product.id,
+      title: product.title,
+      image: productImage,
+      price: Number(product?.price) * discount,
+      stock: product.stock,
+      quantity,
+      variantId: variants.length > 0 ? variants[itemActive - 1]?.id : 0,
+    };
+    // console.log(quantity);
+    cartContext.addProductToCart(data, Number(quantity));
   };
 
   return (
@@ -116,8 +137,13 @@ const SingleProduct = () => {
           {/* detail */}
           <div className="flex w-full mb-6 quantity gap-x-4 spaces-between">
             <span className="py-1">Số lượng</span>
-            <InputCombo className="max-w-[300px]"></InputCombo>
-            <span className="py-1">200 khả dụng</span>
+            <InputCombo
+              className="max-w-[300px]"
+              max={product?.stock}
+              handleQuantity={(val) => setQuantity(val)}
+              type="ADD"
+            ></InputCombo>
+            <span className="py-1">{product?.stock} khả dụng</span>
           </div>
           {/*  */}
           <div className="flex items-center mb-10 gap-x-4">
@@ -147,7 +173,10 @@ const SingleProduct = () => {
           </div>
           {/* button group */}
           <div className="flex button-group gap-x-4">
-            <Button className="w-auto px-4 font-bold bg-white border border-secondary text-secondary hover:bg-secondary hover:text-white">
+            <Button
+              className="w-auto px-4 font-bold bg-white border border-secondary text-secondary hover:bg-secondary hover:text-white"
+              onClick={handleAddToCart}
+            >
               Thêm vào giỏ hàng
             </Button>
             <Button

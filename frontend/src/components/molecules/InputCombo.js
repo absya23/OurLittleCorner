@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const message = "Bạn đã đạt đến số lượng tối đa có sẵn cho mặt hàng này";
 
-const InputCombo = ({ className }) => {
-  const [count, setCount] = useState(1);
+const InputCombo = ({
+  // type = cart thì input dùng để sửa cart
+  // type = "ADD" thì thêm product vào cart
+  type = "CART",
+  id = 1,
+  className,
+  // số lượng khi thêm vào, mặc định là 1
+  quantity = 1,
+  // số lượng còn lại trong kho,
+  max = 10,
+  // hàm change quantity nếu type = "CART"
+  action = () => {},
+  // hàm cập nhật số lượng sản phẩm để thêm vào cart
+  handleQuantity = () => {},
+  ...props
+}) => {
+  const [count, setCount] = useState(quantity);
   const [noti, setNoti] = useState(false);
-  const maximum = 10;
+  const maximum = max;
   const handleDecrease = () => {
     if (count > 1) {
       setCount((prev) => prev - 1);
@@ -34,6 +49,13 @@ const InputCombo = ({ className }) => {
       setNoti(true);
     }
   };
+
+  // ----fix
+  useEffect(() => {
+    if (type === "CART") action(id, count);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (type === "ADD") handleQuantity(count);
+  }, [count]);
   return (
     <div
       className={`flex flex-col justify-start items-start gap-y-2 ${className}`}
@@ -57,6 +79,7 @@ const InputCombo = ({ className }) => {
         <input
           type="text"
           value={count}
+          {...props}
           name="quantity"
           min="1"
           className="w-12 text-center px-2 border-t border-b outline-none focus:border-primary"

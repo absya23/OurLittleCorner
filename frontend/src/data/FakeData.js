@@ -210,7 +210,7 @@ export const productData = [
         image: "https://bucket.nhanh.vn/store/7534/ps/20220728/22070492t.jpg",
       },
       {
-        id: 1,
+        id: 2,
         color: "#ffd800",
         image: "https://bucket.nhanh.vn/store/7534/ps/20220728/22070492v.jpg",
       },
@@ -237,7 +237,7 @@ export const productData = [
           "https://bucket.nhanh.vn/store/7534/ps/20220805/Tu__i_crochet_Basic_one_color_6x15x20___xanh_copy.jpg",
       },
       {
-        id: 1,
+        id: 2,
         color: "#491f07",
         image:
           "https://bucket.nhanh.vn/store/7534/ps/20220805/Tu__i_crochet_Basic_one_color_6x15x20___na__u.jpg",
@@ -264,6 +264,20 @@ export const productData = [
         id: 3,
         image:
           "https://bucket.nhanh.vn/store/7534/psCT/20220713/37564116/22073132xx.jpg",
+      },
+    ],
+  },
+  {
+    id: 14,
+    title: "Gấu bông MS Bell pepper bear Koala runny nose có tóc cao cấp 15cm",
+    price: 295000,
+    stock: 201,
+    image: "https://bucket.nhanh.vn/store/7534/ps/20221121/22110132_1.jpg",
+    imagelist: [
+      {
+        id: 1,
+        image:
+          "https://bucket.nhanh.vn/store/7534/psCT/20221107/37695437/22110132_1.jpg",
       },
     ],
   },

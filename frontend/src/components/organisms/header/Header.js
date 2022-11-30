@@ -4,6 +4,7 @@ import Logo from "../../../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
 import Cart from "../cart/Cart";
 import useHover from "../../../hook/useHover";
+import { useCart } from "../../../context/cartContext";
 
 const headerNavData = [
   { id: 1, title: "TẤT CẢ", url: "/product" },
@@ -19,7 +20,8 @@ const headerNavData = [
 const Header = () => {
   // cart
   const { hovered: cartHover, nodeRef: cartRef } = useHover();
-
+  // get data from cart context
+  const cartContext = useCart();
   return (
     <header className="w-full header">
       {/* content */}
@@ -92,7 +94,7 @@ const Header = () => {
               ref={cartRef}
             >
               <span className="absolute top-0 right-0 flex items-center justify-center w-6 h-6 text-white translate-x-3 -translate-y-2 rounded-full bg-third">
-                0
+                {cartContext?.totalQuantity()}
               </span>
               <span>
                 <svg

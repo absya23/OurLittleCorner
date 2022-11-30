@@ -1,8 +1,6 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Main from "../components/layout/Main";
-import Footer from "../components/organisms/footer/Footer";
-import Header from "../components/organisms/header/Header";
 
 const HomePage = lazy(() => import("../components/pages/homepage/HomePage"));
 const ProductPage = lazy(() =>

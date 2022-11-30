@@ -24,9 +24,7 @@ const ProductItem = ({
         <img
           src={image}
           alt=""
-          onClick={() =>
-            navigate(`/${convertTitle}`, { state: { id }, replace: true })
-          }
+          onClick={() => navigate(`/${convertTitle}`, { state: { id } })}
         />
         <div className="absolute bottom-0 left-0 flex items-center justify-center w-full py-1 product-action bg-primary opacity-70 gap-x-2">
           <div className="text-white cursor-pointer heart">
