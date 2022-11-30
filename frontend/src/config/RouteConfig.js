@@ -42,23 +42,18 @@ const RouteConfig = () => {
           <Route path="/user/signup" element={<SignUpPage />}></Route>
           <Route path="/cart" element={<CartPage />}></Route>
           <Route path="/:title" element={<SingleProduct />}></Route>
-          <Route
-            path="/admin/manage-catalog"
-            element={<ManageCatalog />}
-          ></Route>
-          <Route path="/admin/manage-order" element={<ManageOrder />}></Route>
-          <Route
-            path="/admin/manage-product"
-            element={<ManageProduct />}
-          ></Route>
-          <Route
-            path="/admin/manage-product-type"
-            element={<ManageProductType />}
-          ></Route>
-          <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
           <Route path="/test" element={<div>test</div>}></Route>
           <Route path="*" element={<div>Not found</div>}></Route>
         </Route>
+        <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
+        <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>
+        <Route path="/admin/manage-coupon" element={<ManageCoupon />}></Route>
+        <Route path="/admin/manage-order" element={<ManageOrder />}></Route>
+        <Route path="/admin/manage-product" element={<ManageProduct />}></Route>
+        <Route
+          path="/admin/manage-product-type"
+          element={<ManageProductType />}
+        ></Route>
       </Routes>
     </>
   );
