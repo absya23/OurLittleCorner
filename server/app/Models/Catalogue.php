@@ -11,4 +11,5 @@ class Catalogue extends Model
     protected $table = "catalogue";
     protected $fillable = ["id_catalog","name","del_flag"];
     protected $primaryKey = 'id_catalog';
+    protected $hidden = ['created_at', 'updated_at'];
 }

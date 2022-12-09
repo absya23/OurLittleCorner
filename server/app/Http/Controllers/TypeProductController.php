@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
+use App\Models\Catalogue;
+use App\Models\TypeProduct;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
-class AdminController extends Controller
+class TypeProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +18,8 @@ class AdminController extends Controller
     public function index()
     {
         //
-        $admins = Admin::all();
-        return $admins;
+        $types = DB::table('typeproduct')->join('catalogue','typeproduct.id_catalog','=','catalogue.id_catalog')->select('typeproduct.*','catalogue.name as nameCatalogue')->get();
+        return $types;
     }
 
     /**
@@ -39,6 +41,16 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required|unique:typeproduct',
+            'id_catalog' => 'required'
+        ]);
+        // nếu có catalog đó mới đc gửi
+        if(Catalogue::find($request->id_catalog)) {
+            $type = TypeProduct::create($request->all());
+            return ['status'=>1,'message'=> 'typeproduct created', 'typeproduct' => $type];
+        }
+        else return ['status'=>0,'message'=> 'typeproduct failed'];
     }
 
     /**
@@ -73,30 +85,11 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-    }
-
-    
-    /**
-     * LOGIN
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function login(Request $request)
-    {
-        $request->validate([
-            'admin_name' => 'required',
-            'password' => 'required',
-        ]);
-
-        $admin = Admin::where('admin_name', '=',  $request->admin_name)->first();
-        if($admin) {
-            if(Hash::check($request->password, $admin->password)) {
-                return ["status"=>1, "data"=>$admin, "mess"=>"Đăng nhập thành công!"];
-            }
-        } 
-        return ["status"=>0, "data"=>$request, "mess"=>"Đăng nhập thất bại!"];
+        $type = TypeProduct::find($id);
+        $type->update($request->all());
+        $type->save();
         
+        return ['status'=>1,'message'=> 'typeprod edited', 'typeprod' => $type];
     }
 
     /**
@@ -108,5 +101,10 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+        $type = TypeProduct::find($id);
+        $type->update(["del_flag"=>1]);
+        $type->save();
+        return ['status'=>1,'message'=> 'del_flag = true', 'typeprod' => $type];
+
     }
 }

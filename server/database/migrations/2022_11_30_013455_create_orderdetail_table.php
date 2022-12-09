@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('id_prod')->unsigned();
             $table->foreign('id_prod')->references('id_prod')->on('product')->onUpdate('cascade');
             $table->integer('quantity')->default(0)->unsigned();
-            $table->integer('total')->default(0)->unsigned();
             $table->timestamps();
         });
     }

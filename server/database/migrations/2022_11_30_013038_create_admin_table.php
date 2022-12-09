@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('admin', function (Blueprint $table) {
             $table->increments('id_ad');
             $table->string('admin_name',60)->unique();
-            $table->string('password',20);
+            $table->string('password');
             $table->timestamps();
         });
     }

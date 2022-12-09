@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class AdminController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,6 @@ class AdminController extends Controller
     public function index()
     {
         //
-        $admins = Admin::all();
-        return $admins;
     }
 
     /**
@@ -73,30 +69,6 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-    }
-
-    
-    /**
-     * LOGIN
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function login(Request $request)
-    {
-        $request->validate([
-            'admin_name' => 'required',
-            'password' => 'required',
-        ]);
-
-        $admin = Admin::where('admin_name', '=',  $request->admin_name)->first();
-        if($admin) {
-            if(Hash::check($request->password, $admin->password)) {
-                return ["status"=>1, "data"=>$admin, "mess"=>"Đăng nhập thành công!"];
-            }
-        } 
-        return ["status"=>0, "data"=>$request, "mess"=>"Đăng nhập thất bại!"];
-        
     }
 
     /**
