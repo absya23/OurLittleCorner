@@ -11,4 +11,5 @@ class TypeProduct extends Model
     protected $table = "typeproduct";
     protected $fillable = ["id_type","id_catalog","name", "del_flag"];
     protected $primaryKey = 'id_type';
+    protected $hidden = ['created_at', 'updated_at'];
 }

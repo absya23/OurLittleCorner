@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id_user');
             $table->string('username',60)->unique();
             $table->string('name');
-            $table->string('password',20);
+            $table->string('password');
             $table->string('email');
             $table->string('address')->default('');
             $table->string('phone')->default('');

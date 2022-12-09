@@ -11,4 +11,5 @@ class Images extends Model
     protected $table = "images";
     protected $fillable = ["id_img","URL","id_prod"];
     protected $primaryKey = 'id_img';
+    protected $hidden = ['created_at', 'updated_at'];
 }

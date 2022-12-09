@@ -14,4 +14,9 @@ class Admin extends Model
     protected $hidden = ["password"];
 
     protected $primaryKey = 'id_ad';
+
+    // public function getAdmin() {
+    //     // return $this->get();
+    //     return "hi";
+    // }
 }
