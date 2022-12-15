@@ -11,4 +11,5 @@ class Status extends Model
     protected $table = "status";
     protected $fillable = ["id_status","description"];
     protected $primaryKey = 'id_status';
+    protected $hidden = ['created_at', 'updated_at'];
 }

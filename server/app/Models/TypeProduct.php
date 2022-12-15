@@ -12,4 +12,8 @@ class TypeProduct extends Model
     protected $fillable = ["id_type","id_catalog","name", "del_flag"];
     protected $primaryKey = 'id_type';
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function cata() {
+        return $this->belongsTo(Catalogue::class,'id_catalog');
+    }
 }

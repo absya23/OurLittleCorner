@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -189,6 +190,8 @@ class ProductSeeder extends Seeder
                 'description' => $prod[4],
                 'quantity' => $prod[5],
                 'del_flag' => false,
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
             ]);
         }
         
