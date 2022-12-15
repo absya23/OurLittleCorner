@@ -45,7 +45,9 @@ class OrderSeeder extends Seeder
         foreach ($orders as $order) {
             DB::table('order')->insert([
                 'id_user' => $order[0],
-                'id_status' => $order[1]
+                'id_status' => $order[1],
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
             ]);
         }
         

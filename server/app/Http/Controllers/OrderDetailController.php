@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Status;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Type\Integer;
 
 class OrderDetailController extends Controller
 {
@@ -14,6 +20,7 @@ class OrderDetailController extends Controller
     public function index()
     {
         //
+        return OrderDetail::all();
     }
 
     /**
@@ -35,6 +42,14 @@ class OrderDetailController extends Controller
     public function store(Request $request)
     {
         //
+        $orderDe = new OrderDetail;
+        if(!$request->id_order || !$request->id_prod || !$request->quantity) return ['status'=>0,'message'=>'thiếu 1 trong 3 trường id_order, id_prod, quantity'];
+        $orderDe->id_order = $request->id_order;
+        $orderDe->id_prod = $request->id_prod;
+        $orderDe->quantity = $request->quantity;
+
+        $orderDe->save();
+        return ['status'=>1,'message'=>'orderdetail created', 'data'=> $orderDe];
     }
 
     /**
@@ -46,7 +61,61 @@ class OrderDetailController extends Controller
     public function show($id)
     {
         //
+        $order = Order::find($id);
+        $status = Status::find($order->id_status);
+        $products = DB::table('orderdetail')->where('id_order',$id)->join('product', 'orderdetail.id_prod','=','product.id_prod')->select('orderdetail.*', 'product.name as nameProd', 'product.price as dongia')->get();
+        $data = [];
+        $sum = 0;
+        foreach($products as $product) {
+            $value = (object)["id_prod" => $product->id_prod,'name' => $product->nameProd, "quantity"=> $product->quantity, "price" => $product->dongia];
+            array_push($data,$value);
+            $sum += ((int) $product->dongia) *((int)$product->quantity);
+        }
+        $result = (object) [
+            "id_order" => $id,
+            "id_user" => $order->id_user,
+            "id_status" => $order->id_status,
+            "status" => $status->description,
+            "total" => $sum,
+            "data" => $data,
+            "created_at" => $order->created_at
+        ];
+        return $result;
     }
+
+                /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrderUser($id_user)
+    {
+        //
+        // $order = Order::find($id_user);
+        // $status = Status::find($order->id_status);
+
+        $orders = DB::table('order')->where('id_user',$id_user)->join('status','order.id_status','=','status.id_status')->select('order.*', 'status.description as statusName')->get();
+        $results = [];
+        foreach($orders as $order) {
+            $data = OrderDetailController::show($order->id_order);
+            $temp = (object) [
+                "id_order" => $order->id_order,
+                "id_user" => $order->id_user,
+                "id_status" => $order->id_status,
+                "status" => $order->statusName,
+                "created_at" => $order->created_at,
+                "total" => $data->total,
+                "data_prods" => $data->data,
+            ];
+            
+            array_push($results, $temp);
+        }
+
+        // return $result;
+        return $results;
+    }
+
 
     /**
      * Show the form for editing the specified resource.

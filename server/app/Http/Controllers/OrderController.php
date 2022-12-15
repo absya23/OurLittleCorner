@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -14,6 +17,8 @@ class OrderController extends Controller
     public function index()
     {
         //
+        $orders = DB::table('order')->join('user','order.id_user','=','user.id_user')->join('status','order.id_status','=','status.id_status')->select('order.*','user.username as username', 'status.description as statusName')->get();
+        return $orders;
     }
 
     /**
@@ -35,6 +40,14 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
+        $order = new Order;
+        if(!$request->id_user) return ['status'=>0,'message'=>'dont have id_user'];
+        $order->id_user = $request->id_user;
+        $order->id_status = 1;
+        $order->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $order->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $order->save();
+        return ['status'=>1,'message'=>'order created', 'data'=> $order];
     }
 
     /**
@@ -69,6 +82,14 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'id_status' => 'required'
+        ]);
+        $order = Order::find($id);
+        $order->update($request->all());
+        $order->save();
+        
+        return ['status'=>1,'message'=> 'order edited', 'prod' => $order];
     }
 
     /**

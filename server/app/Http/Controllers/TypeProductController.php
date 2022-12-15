@@ -64,6 +64,19 @@ class TypeProductController extends Controller
         //
     }
 
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getByCata($id_cata)
+    {
+        //
+        $types = DB::table('typeproduct')->where('id_catalog',$id_cata)->get();
+        return $types;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
