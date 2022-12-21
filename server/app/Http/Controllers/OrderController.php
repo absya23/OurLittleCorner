@@ -17,7 +17,15 @@ class OrderController extends Controller
     public function index()
     {
         //
-        $orders = DB::table('order')->join('user','order.id_user','=','user.id_user')->join('status','order.id_status','=','status.id_status')->select('order.*','user.username as username', 'status.description as statusName')->get();
+
+
+        $totalMoney =  DB::table('orderdetail')->join('product', 'orderdetail.id_prod','=','product.id_prod')->select('orderdetail.id_order as id_order', DB::raw('sum(product.price * orderdetail.quantity) as totalMoney'))->groupBy('id_order');
+
+        $orders = DB::table('order')->select('order.*','user.name as name', 'status.description as statusName', 'totalMoney.totalMoney')
+        ->join('user','order.id_user','=','user.id_user')->join('status','order.id_status','=','status.id_status')
+        ->joinSub($totalMoney,'totalMoney', function($join) {$join->on('totalMoney.id_order','=','order.id_order');
+        })->orderBy('order.id_order', 'ASC')->get();
+
         return $orders;
     }
 

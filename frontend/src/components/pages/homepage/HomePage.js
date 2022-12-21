@@ -9,19 +9,31 @@ import ProductTitle from "../../atoms/ProductTitle";
 import CarouselCenter from "../../molecules/carousel/CarouselCenter";
 
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import {
+  handleFetchCata,
+  handleFetchProduct,
+  handleFetchType,
+} from "../../../redux/handlers";
 
 const HomePage = () => {
+  // useEffect(() => {
+  //   // test
+  //   axios
+  //     .get("http://localhost:8000/api/catalogue")
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // });
+  const dispatch = useDispatch();
   useEffect(() => {
-    // test
-    axios
-      .get("http://localhost:8000/api/admin")
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+    dispatch(handleFetchProduct());
+    dispatch(handleFetchCata());
+    dispatch(handleFetchType());
+  }, [dispatch]);
   return (
     <div className="homepage">
       <SliderGroup></SliderGroup>

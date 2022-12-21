@@ -49,7 +49,7 @@ const Cart = () => {
         <Fragment>
           <div className="flex items-center justify-between pt-4 pb-3">
             <span>Thành tiền</span>
-            <span className="text-hot font-bold">
+            <span className="font-bold text-hot">
               {handleFormatNumber(cartContext?.totalMoney())}đ
             </span>
           </div>
@@ -76,23 +76,25 @@ const CartItem = ({ id, title, image, price, quantity, stock }) => {
         alt=""
         className="w-[88px] h-[88px] mr-3 cursor-pointer"
         onClick={() =>
-          navigate(`/${removeVietnameseTones(title)}`, {
+          navigate(`/product/${removeVietnameseTones(title)}`, {
             state: { id },
           })
         }
       />
       <div className="flex-1 item-info">
         <h4
-          className="font-bold break-line-2 cursor-pointer hover:text-secondary"
+          className="font-bold cursor-pointer break-line-2 hover:text-secondary"
           onClick={() =>
-            navigate(`/${removeVietnameseTones(title)}`, {
+            navigate(`/product/${removeVietnameseTones(title)}`, {
               state: { id },
             })
           }
         >
           {title}
         </h4>
-        <p className="font-bold price text-hot">Đơn giá: {price}</p>
+        <p className="font-bold price text-hot">
+          Đơn giá: {handleFormatNumber(price)}
+        </p>
         <div className="flex items-center quantity gap-x-1">
           <InputCombo type="CART" quantity={quantity} max={stock}></InputCombo>
         </div>

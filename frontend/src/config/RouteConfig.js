@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Main from "../components/layout/Main";
+import NotFound from "../components/pages/NotFound";
 
 const HomePage = lazy(() => import("../components/pages/homepage/HomePage"));
 const ProductPage = lazy(() =>
@@ -28,6 +29,11 @@ const ManageSlide = lazy(() =>
   import("../components/pages/manage_slide/ManageSlide")
 );
 
+const CheckoutPage = lazy(() =>
+  import("../components/pages/cart/CheckoutPage")
+);
+const ProfilePage = lazy(() => import("../components/pages/user/ProfilePage"));
+
 const RouteConfig = () => {
   return (
     <>
@@ -39,9 +45,11 @@ const RouteConfig = () => {
           <Route path="/user/signin" element={<SignInPage />}></Route>
           <Route path="/user/signup" element={<SignUpPage />}></Route>
           <Route path="/cart" element={<CartPage />}></Route>
-          <Route path="/:title" element={<SingleProduct />}></Route>
+          <Route path="/cart/checkout" element={<CheckoutPage />}></Route>
+          <Route path="/product/:title" element={<SingleProduct />}></Route>
+          <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/test" element={<div>test</div>}></Route>
-          <Route path="*" element={<div>Not found</div>}></Route>
+          <Route path="*" element={<NotFound></NotFound>}></Route>
         </Route>
         <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
         <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>
