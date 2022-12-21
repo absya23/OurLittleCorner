@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Outlet } from "react-router-dom";
 import Sidebar from "../../organisms/sidebar/Sidebar";
 // import Modal from "../../organisms/modal/Modal";
@@ -6,45 +6,56 @@ import "./ManageProductType.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
 import Toolbar from "../../organisms/toolbar/Toolbar";
-
-const DATA = [
-  {
-    name: "bút chì",
-    type: "bút",
-  },
-  {
-    name: "viết mực",
-    type: "viết",
-  },
-  {
-    name: "thước kẻ dẻo",
-    type: "thước",
-  },
-  {
-    name: "dây thun",
-    type: "dây",
-  },
-  {
-    name: "bình đựng nước",
-    type: "đồ gia dụng",
-  },
-  {
-    name: "chảo chống dính",
-    type: "đồ dùng bếp",
-  },
-];
+import axios from "axios";
 
 const ManageProductType = () => {
   const [addShow, setAddShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
 
+  const [dataArr, setDataArr] = useState([]);
+  const [catArr, setCatArr] = useState([]);
+
+  //Dữ liệu cần truyền để edit
+  const [idToEdit, SetIdToEdit] = useState("");
+  const [idToDelete, SetIdToDelete] = useState("");
+  //tắt modal
   const handleAddClose = () => setAddShow(false);
   const handleEditClose = () => setEditShow(false);
   const handleDeleteClose = () => setDeleteShow(false);
+
+  //hiển thị modal
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = () => setEditShow(true);
-  const handleDeleteShow = () => setDeleteShow(true);
+  const handleEditShow = (id) => {
+    SetIdToEdit(id);
+    setEditShow(true);
+  };
+  const handleDeleteShow = (id) => {
+    setDeleteShow(true);
+    SetIdToDelete(id);
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/catalogue")
+      .then((res) => {
+        // console.log(res.data);
+        setCatArr(res.data.filter((item) => item.del_flag == 0));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:8000/api/types")
+      .then((res) => {
+        // console.log(res.data);
+        setDataArr(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <div className="manage-product-type">
       <Sidebar />
@@ -64,28 +75,38 @@ const ManageProductType = () => {
             </tr>
           </thead>
           <tbody>
-            {DATA.map((item, index) => {
-              return (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{item.name}</td>
-                  <td>{item.type}</td>
-                  <td>
-                    <Button
-                      variant="outline-success"
-                      className="mr-3"
-                      onClick={handleEditShow}
-                    >
-                      <i class="bi bi-pencil-fill"></i>
-                      Sửa
-                    </Button>{" "}
-                    <Button variant="outline-danger" onClick={handleDeleteShow}>
-                      <i class="bi bi-trash3-fill"></i>Xóa
-                    </Button>{" "}
-                  </td>
-                </tr>
-              );
-            })}
+            {dataArr
+              .filter((item) => item.del_flag == 0)
+              .map((item, index) => {
+                return (
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      {catArr.find((el) => el.id_catalog === item.id_catalog)
+                        ? catArr.find((el) => el.id_catalog === item.id_catalog)
+                            .name
+                        : "Khác"}
+                    </td>
+                    <td>
+                      <Button
+                        variant="outline-success"
+                        className="mr-3"
+                        onClick={() => handleEditShow(item.id_type)}
+                      >
+                        <i class="bi bi-pencil-fill"></i>
+                        Sửa
+                      </Button>{" "}
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => handleDeleteShow(item.id_type)}
+                      >
+                        <i class="bi bi-trash3-fill"></i>Xóa
+                      </Button>{" "}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       </div>
@@ -93,16 +114,22 @@ const ManageProductType = () => {
         type="add-product-type"
         show={addShow}
         handleClose={handleAddClose}
+        dataArr={dataArr}
       />
       <CustomModal
         type="edit-product-type"
         show={editShow}
         handleClose={handleEditClose}
+        id_type={idToEdit}
+        dataArr={dataArr}
+        setDataArr={setDataArr}
       />
       <CustomModal
         type="delete-product-type"
         show={deleteShow}
         handleClose={handleDeleteClose}
+        id_type={idToDelete}
+        dataArr={dataArr}
       />
     </div>
   );

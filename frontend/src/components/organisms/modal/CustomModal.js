@@ -1,9 +1,292 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./modal.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
+import axios from "axios";
+function CustomModal({
+  type,
+  show,
+  handleClose,
+  id_catalog,
+  id_prod,
+  id_type,
+  dataArr,
+  setDataArr,
+}) {
+  //lấy dữ liệu để chỉnh sửa
+  ////catalog:
+  // let nameCatalog;
+  // if (id_catalog != undefined) {
+  //   nameCatalog =
+  //     dataArr.filter((item) => item.id_catalog == id_catalog).length > 0
+  //       ? dataArr.filter((item) => item.id_catalog == id_catalog)[0].name
+  //       : "";
+  // }
 
-function CustomModal({ type, show, handleClose }) {
+  // console.log(type, " name catalog>>>", nameCatalog);
+
   const [selectedImage, setSelectedImage] = useState(null);
+  // const didMount = useRef(false);
+
+  //Các mảng dữ liệu
+  const [catArr, setCatArr] = useState([]);
+  const [typeArr, setTypeArr] = useState([]);
+
+  //state của catalog
+  const [addCatInput, setAddCatInput] = useState("");
+  // const [editCatInput, setEditCatInput] = useState(
+  //   dataArr.find((item) => item.id_catalog == id_catalog)
+  //     ? dataArr.find((item) => item.id_catalog == id_catalog).name
+  //     : ""
+  // );
+  const [editCatInput, setEditCatInput] = useState("test");
+
+  //state của types
+  const [addTypeNameInput, setAddTypeNameInput] = useState("");
+  const [addTypeOfInput, setAddTypeOfInput] = useState("");
+
+  const [editTypeNameInput, setEditTypeNameInput] = useState();
+  const [editTypeOfInput, setEditTypeOfInput] = useState();
+
+  //state của product
+  const [addProductNameInput, setAddProductNameInput] = useState("");
+  const [addProductOfInput, setAddProductOfInput] = useState("");
+  const [addProductPriceInput, setAddProductPriceInput] = useState("");
+  const [addProductImageInput, setAddProductImageInput] = useState("");
+  const [addProductDescInput, setAddProductDescInput] = useState("");
+  const [addProductQuantityInput, setAddProductQuantityInput] = useState("");
+  const [editProductNameInput, setEditProductNameInput] = useState("");
+  const [editProductOfInput, setEditProductOfInput] = useState("");
+  const [editProductPriceInput, setEditProductPriceInput] = useState("");
+  const [editProductImageInput, setEditProductImageInput] = useState("");
+  const [editProductDescInput, setEditProductDescInput] = useState("");
+  const [editProductQuantityInput, setEditProductQuantityInput] = useState("");
+
+  //Hàm upload ảnh
+  const uploadImage = (image) => {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "xfubk0t8");
+
+    axios
+      .post("https://api.cloudinary.com/v1_1/djt9g7wvi/image/upload", formData)
+      .then((res) => {
+        console.log(res);
+        console.log("url ảnh>>>>", res.data.secure_url);
+        setAddProductImageInput(res.data.secure_url);
+      });
+  };
+
+  //Thêm sửa xóa catalog
+  const addCatalog = () => {
+    const newItem = {
+      name: addCatInput,
+      del_flag: 0,
+    };
+    axios
+      .post("http://localhost:8000/api/catalogue", newItem)
+      .then((res) => {
+        dataArr.push(newItem);
+        window.handleClose();
+        alert("đã thêm thành công danh mục sản phẩm");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("thêm danh mục sản phẩm thất bại");
+      });
+  };
+  const editCatalog = (id) => {
+    const newItem = {
+      id_catalog: id,
+      name: editCatInput,
+      del_flag: 0,
+    };
+    axios
+      .put("http://localhost:8000/api/catalogue/" + id, newItem)
+      .then((res) => {
+        dataArr.find((el) => el.id_catalog == id).name = editCatInput;
+        handleClose();
+        alert("đã sửa thành công danh mục sản phẩm");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("sửa danh mục sản phẩm thất bại");
+      });
+  };
+  const deleteCatalog = (id) => {
+    axios
+      .delete("http://localhost:8000/api/catalogue/" + id)
+      .then((res) => {
+        dataArr.forEach((item, i) => {
+          if (item.id_catalog == id) {
+            dataArr.splice(i, 1);
+          }
+        });
+        handleClose();
+        alert("đã xóa thành công danh mục sản phẩm");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("xóa danh mục sản phẩm thất bại");
+      });
+  };
+
+  //Thêm sửa xóa types
+  const addType = () => {
+    const newItem = {
+      id_catalog: addTypeOfInput,
+      name: addTypeNameInput,
+      del_flag: 0,
+      created_at: null,
+      updated_at: null,
+    };
+    axios
+      .post("http://localhost:8000/api/types", newItem)
+      .then((res) => {
+        dataArr.push(newItem);
+        handleClose();
+        alert("đã thêm thành công loại sản phẩm");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("thêm loại sản phẩm thất bại");
+      });
+  };
+  const editType = (id) => {
+    const newItem = {
+      id_type: id,
+      id_catalog: editTypeOfInput,
+      name: editTypeNameInput,
+      del_flag: 0,
+    };
+    axios
+      .put("http://localhost:8000/api/types/" + id, newItem)
+      .then((res) => {
+        //xử lý UI
+        // const dataArrCopy = [...dataArr];
+        dataArr.find((el) => el.id_type == id).id_catalog = editTypeOfInput;
+        dataArr.find((el) => el.id_type == id).name = editTypeNameInput;
+        // setDataArr(dataArrCopy);
+
+        handleClose();
+        alert("đã sửa thành công loại sản phẩm");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("sửa loại sản phẩm thất bại");
+      });
+  };
+  const deleteType = (id) => {
+    axios
+      .delete("http://localhost:8000/api/types/" + id)
+      .then((res) => {
+        alert("đã xóa thành công loại sản phẩm");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    handleClose();
+
+    dataArr.forEach((item, i) => {
+      if (item.id_type == id) {
+        dataArr.splice(i, 1);
+      }
+    });
+  };
+
+  //Thêm sửa xóa product
+  const addProduct = async () => {
+    const newItem = {
+      id_type: addProductOfInput,
+      name: addProductNameInput,
+      price: addProductPriceInput,
+      image: addProductImageInput,
+      description: addProductDescInput,
+      quantity: addProductQuantityInput,
+      del_flag: 0,
+    };
+    axios
+      .post("http://localhost:8000/api/product", newItem)
+      .then((res) => {
+        alert("đã thêm thành công sản phẩm");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    handleClose();
+    dataArr.push(newItem);
+  };
+
+  const editProduct = (id) => {
+    const newItem = {
+      id_prod: id,
+      id_type: editProductOfInput,
+      name: editProductNameInput,
+      price: editProductPriceInput,
+      image: editProductImageInput,
+      description: editProductDescInput,
+      quantity: editProductQuantityInput,
+      del_flag: 0,
+    };
+    axios
+      .put("http://localhost:8000/api/product/" + id, newItem)
+      .then((res) => {
+        alert("đã sửa thành công sản phẩm");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    handleClose();
+
+    dataArr.find((el) => el.id_prod == id).id_type = editProductOfInput;
+    dataArr.find((el) => el.id_prod == id).name = editProductNameInput;
+    dataArr.find((el) => el.id_prod == id).price = editProductPriceInput;
+    dataArr.find((el) => el.id_prod == id).image = editProductImageInput;
+    dataArr.find((el) => el.id_prod == id).description = editProductDescInput;
+    dataArr.find((el) => el.id_prod == id).quantity = editProductQuantityInput;
+  };
+  const deleteProduct = (id) => {
+    axios
+      .delete("http://localhost:8000/api/product/" + id)
+      .then((res) => {
+        alert("đã xóa thành công sản phẩm");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    handleClose();
+
+    dataArr.forEach((item, i) => {
+      if (item.id_prod == id) {
+        dataArr.splice(i, 1);
+      }
+    });
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/catalogue")
+      .then((res) => {
+        // console.log(res.data);
+        setCatArr(res.data.filter((item) => item.del_flag == 0));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:8000/api/types")
+      .then((res) => {
+        // console.log(res.data);
+        setTypeArr(res.data.filter((item) => item.del_flag == 0));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   switch (type) {
     //Thêm danh mục
@@ -23,6 +306,8 @@ function CustomModal({ type, show, handleClose }) {
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên danh mục..."
+                  value={addCatInput}
+                  onChange={(e) => setAddCatInput(e.target.value)}
                   autoFocus
                 />
               </Form.Group>
@@ -32,7 +317,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={addCatalog}>
               Thêm
             </Button>
           </Modal.Footer>
@@ -55,6 +340,8 @@ function CustomModal({ type, show, handleClose }) {
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên danh mục..."
+                  value={editCatInput}
+                  onChange={(e) => setEditCatInput(e.target.value)}
                   autoFocus
                 />
               </Form.Group>
@@ -64,7 +351,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => editCatalog(id_catalog)}>
               Lưu
             </Button>
           </Modal.Footer>
@@ -82,7 +369,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => deleteCatalog(id_catalog)}>
               Xóa
             </Button>
           </Modal.Footer>
@@ -106,26 +393,31 @@ function CustomModal({ type, show, handleClose }) {
                   type="text"
                   placeholder="Nhập tên loại sản phẩm..."
                   autoFocus
+                  value={addTypeNameInput}
+                  onChange={(e) => setAddTypeNameInput(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setAddTypeOfInput(e.target.value);
+                }}
               >
-                <Form.Label>Danh mục</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập tên danh mục..."
-                  autoFocus
-                />
-              </Form.Group>
+                <option>Chọn danh mục sản phẩm</option>
+                {catArr
+                  .filter((item) => item.del_flag == 0)
+                  .map((item, index) => {
+                    return <option value={item.id_catalog}>{item.name}</option>;
+                  })}
+              </Form.Select>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={addType}>
               Thêm
             </Button>
           </Modal.Footer>
@@ -148,27 +440,32 @@ function CustomModal({ type, show, handleClose }) {
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên loại sản phẩm..."
-                  autoFocus
+                  // autoFocus
+                  value={editTypeNameInput}
+                  onChange={(e) => setEditTypeNameInput(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setEditTypeOfInput(e.target.value);
+                }}
               >
-                <Form.Label>Danh mục</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập danh mục..."
-                  autoFocus
-                />
-              </Form.Group>
+                <option>Chọn danh mục sản phẩm</option>
+                {catArr
+                  .filter((item) => item.del_flag == 0)
+                  .map((item, index) => {
+                    return <option value={item.id_catalog}>{item.name}</option>;
+                  })}
+              </Form.Select>
             </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => editType(id_type)}>
               Lưu
             </Button>
           </Modal.Footer>
@@ -186,7 +483,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => deleteType(id_type)}>
               Xóa
             </Button>
           </Modal.Footer>
@@ -210,39 +507,89 @@ function CustomModal({ type, show, handleClose }) {
                   type="text"
                   placeholder="Nhập danh mục..."
                   autoFocus
+                  value={addProductNameInput}
+                  onChange={(e) => setAddProductNameInput(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setAddProductOfInput(e.target.value);
+                }}
               >
-                <Form.Label>Loại sản phẩm</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập loại sản phẩm..."
-                  autoFocus
-                />
-              </Form.Group>
+                <option>Chọn loại sản phẩm</option>
+                {typeArr
+                  .filter((item) => item.del_flag == 0)
+                  .map((item, index) => {
+                    return <option value={item.id_type}>{item.name}</option>;
+                  })}
+              </Form.Select>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Giá</Form.Label>
-                <Form.Control type="text" placeholder="Nhập giá..." autoFocus />
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập giá..."
+                  autoFocus
+                  value={addProductPriceInput}
+                  onChange={(e) => setAddProductPriceInput(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Ảnh</Form.Label>
-                <Form.Control type="text" placeholder="Nhập ảnh..." autoFocus />
+                {selectedImage && (
+                  <div>
+                    <img
+                      alt="not fount"
+                      width={"250px"}
+                      src={URL.createObjectURL(selectedImage)}
+                    />
+                    <br />
+                  </div>
+                )}
+                <Form.Control
+                  type="file"
+                  // multiple
+                  placeholder="Nhập ảnh..."
+                  autoFocus
+                  onChange={(event) => {
+                    console.log(event.target.files[0]);
+                    setSelectedImage(event.target.files[0]);
+                    uploadImage(event.target.files[0]);
+                  }}
+                />
+                <button onClick={() => setSelectedImage(null)}>Remove</button>
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Số lượng</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập số lượng..."
+                  autoFocus
+                  value={addProductQuantityInput}
+                  onChange={(e) => setAddProductQuantityInput(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
                 <Form.Label>Mô tả</Form.Label>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={addProductDescInput}
+                  onChange={(e) => setAddProductDescInput(e.target.value)}
+                />
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -250,7 +597,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={addProduct}>
               Lưu
             </Button>
           </Modal.Footer>
@@ -274,16 +621,45 @@ function CustomModal({ type, show, handleClose }) {
                   type="text"
                   placeholder="Nhập danh mục..."
                   autoFocus
+                  value={editProductNameInput}
+                  onChange={(e) => setEditProductNameInput(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setEditProductOfInput(e.target.value);
+                }}
+              >
+                <option>Chọn loại sản phẩm</option>
+                {typeArr
+                  .filter((item) => item.del_flag == 0)
+                  .map((item, index) => {
+                    return <option value={item.id_type}>{item.name}</option>;
+                  })}
+              </Form.Select>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Giá</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập giá..."
+                  autoFocus
+                  value={editProductPriceInput}
+                  onChange={(e) => setEditProductPriceInput(e.target.value)}
                 />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
-                <Form.Label>Loại sản phẩm</Form.Label>
+                <Form.Label>Ảnh</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Nhập loại sản phẩm..."
+                  placeholder="Chưa up ảnh được..."
                   autoFocus
                 />
               </Form.Group>
@@ -291,22 +667,26 @@ function CustomModal({ type, show, handleClose }) {
                 className="mb-3"
                 controlId="exampleForm.ControlInput1"
               >
-                <Form.Label>Giá</Form.Label>
-                <Form.Control type="text" placeholder="Nhập giá..." autoFocus />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Ảnh</Form.Label>
-                <Form.Control type="text" placeholder="Nhập ảnh..." autoFocus />
+                <Form.Label>Số lượng</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nhập số lượng..."
+                  autoFocus
+                  value={editProductQuantityInput}
+                  onChange={(e) => setEditProductQuantityInput(e.target.value)}
+                />
               </Form.Group>
               <Form.Group
                 className="mb-3"
                 controlId="exampleForm.ControlTextarea1"
               >
                 <Form.Label>Mô tả</Form.Label>
-                <Form.Control as="textarea" rows={3} />
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={editProductDescInput}
+                  onChange={(e) => setEditProductDescInput(e.target.value)}
+                />
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -314,7 +694,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => editProduct(id_prod)}>
               Lưu
             </Button>
           </Modal.Footer>
@@ -332,7 +712,7 @@ function CustomModal({ type, show, handleClose }) {
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => deleteProduct(id_prod)}>
               Xóa
             </Button>
           </Modal.Footer>

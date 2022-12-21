@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Outlet } from "react-router-dom";
 import Sidebar from "../../organisms/sidebar/Sidebar";
 // import Modal from "../../organisms/modal/Modal";
@@ -6,46 +6,45 @@ import "./ManageCatalog.scss";
 import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
 import Toolbar from "../../organisms/toolbar/Toolbar";
-
-const DATA = [
-  {
-    name: "bút chì",
-    type: "bút",
-  },
-  {
-    name: "viết mực",
-    type: "viết",
-  },
-  {
-    name: "thước kẻ dẻo",
-    type: "thước",
-  },
-  {
-    name: "dây thun",
-    type: "dây",
-  },
-  {
-    name: "bình đựng nước",
-    type: "đồ gia dụng",
-  },
-  {
-    name: "chảo chống dính",
-    type: "đồ dùng bếp",
-  },
-];
+import axios from "axios";
 
 const ManageCatalog = () => {
-  // const [modalOpen, setModalOpen] = useState(false);
+  const [dataArr, setDataArr] = useState([]);
   const [addShow, setAddShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
+  const [idToEdit, SetIdToEdit] = useState("");
+  const [idToDelete, SetIdToDelete] = useState("");
 
+  //tắt modal
   const handleAddClose = () => setAddShow(false);
   const handleEditClose = () => setEditShow(false);
   const handleDeleteClose = () => setDeleteShow(false);
+
+  //hiển thị modal
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = () => setEditShow(true);
-  const handleDeleteShow = () => setDeleteShow(true);
+  const handleEditShow = (id) => {
+    setEditShow(true);
+    SetIdToEdit(id);
+  };
+  const handleDeleteShow = (id) => {
+    setDeleteShow(true);
+    SetIdToDelete(id);
+  };
+
+  useEffect(() => {
+    // test
+    axios
+      .get("http://localhost:8000/api/catalogue")
+      .then((res) => {
+        console.log(res.data);
+        setDataArr(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="manage-catalog">
       <Sidebar />
@@ -63,27 +62,32 @@ const ManageCatalog = () => {
             </tr>
           </thead>
           <tbody>
-            {DATA.map((item, index) => {
-              return (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{item.name}</td>
-                  <td>
-                    <Button
-                      variant="outline-success"
-                      className="mr-3"
-                      onClick={handleEditShow}
-                    >
-                      <i class="bi bi-pencil-fill"></i>
-                      Sửa
-                    </Button>{" "}
-                    <Button variant="outline-danger" onClick={handleDeleteShow}>
-                      <i class="bi bi-trash3-fill"></i>Xóa
-                    </Button>{" "}
-                  </td>
-                </tr>
-              );
-            })}
+            {dataArr
+              .filter((item) => item.del_flag == 0)
+              .map((item, index) => {
+                return (
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td>
+                      <Button
+                        variant="outline-success"
+                        className="mr-3"
+                        onClick={() => handleEditShow(item.id_catalog)}
+                      >
+                        <i class="bi bi-pencil-fill"></i>
+                        Sửa
+                      </Button>{" "}
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => handleDeleteShow(item.id_catalog)}
+                      >
+                        <i class="bi bi-trash3-fill"></i>Xóa
+                      </Button>{" "}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       </div>
@@ -91,16 +95,21 @@ const ManageCatalog = () => {
         type="add-catalog"
         show={addShow}
         handleClose={handleAddClose}
+        dataArr={dataArr}
       />
       <CustomModal
         type="edit-catalog"
         show={editShow}
         handleClose={handleEditClose}
+        id_catalog={idToEdit}
+        dataArr={dataArr}
       />
       <CustomModal
         type="delete-catalog"
         show={deleteShow}
         handleClose={handleDeleteClose}
+        id_catalog={idToDelete}
+        dataArr={dataArr}
       />
     </div>
   );
