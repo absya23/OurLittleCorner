@@ -118,3 +118,19 @@ Route::get('order/{id}', 'OrderDetailController@show');
 Route::get('order/user/{id_user}', 'OrderDetailController@getOrderUser');
 // -> user tạo đơn hàng
 Route::post('order', 'OrderDetailController@store');
+
+// ============= SLIDE ==============
+// get all image
+Route::get('slide', 'SlideController@index');
+// theem 1 slide
+Route::post('slide', 'SlideController@store');
+// -> xóa 1 slide theo id
+Route::delete('slide/{id}', 'SlideController@destroy');
+
+// ========== CART DETAIL ================
+// get all cartdetail
+Route::get('cart', 'CartDetailController@index');
+// get all cartdetail by id_user
+Route::get('cart/{id_user}', 'CartDetailController@show');
+
+// ========== FAVO DETAIL =================

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { productData } from "../../../data/FakeData";
+import { handleFetchProduct } from "../../../redux/handlers";
 import ProductTitle from "../../atoms/ProductTitle";
 import ProductItem from "../../molecules/productItem/ProductItem";
 
 const Product = ({ children, title, length }) => {
   const navigate = useNavigate();
-  const productGroupData = productData;
+  const { data: dataProd, loading } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(handleFetchProduct());
+  }, [dispatch]);
   return (
     <section className="mb-20 product">
       <div className="container">
@@ -17,26 +22,26 @@ const Product = ({ children, title, length }) => {
         <div className="mb-10 product-list">
           <div className="grid grid-cols-4 gap-8 product-list-container">
             {length > 0 &&
-              productGroupData.length > 0 &&
-              productGroupData
+              dataProd.length > 0 &&
+              dataProd
                 .slice(0, length)
                 .map((item, index) => (
                   <ProductItem
                     key={index}
                     id={item?.id}
-                    title={item?.title}
+                    title={item?.name}
                     price={item?.price}
                     image={item?.image}
                   ></ProductItem>
                 ))}
             {!length &&
-              productGroupData
+              dataProd
                 .slice(0, 8)
                 .map((item, index) => (
                   <ProductItem
                     key={index}
                     id={item?.id}
-                    title={item?.title}
+                    title={item?.name}
                     price={item?.price}
                     image={item?.image}
                   ></ProductItem>
