@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = Product::all();
+        $products = DB::table('product')->join('typeproduct','product.id_type','=','typeproduct.id_type')->select('product.*', 'typeproduct.name as nameType')->get();
         return $products;
     }
 
@@ -61,7 +61,7 @@ class ProductController extends Controller
     public function show($id)
     {
         //
-        $prod = Product::find($id);
+        $prod = DB::table('product')->join('typeproduct','product.id_type','=','typeproduct.id_type')->where('product.id_prod',$id)->select('product.*', 'typeproduct.name as nameType')->first();
         return $prod;
     }
 

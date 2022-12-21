@@ -8,7 +8,6 @@ use App\Models\Status;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Type\Integer;
 
 class OrderDetailController extends Controller
 {
@@ -63,21 +62,18 @@ class OrderDetailController extends Controller
         //
         $order = Order::find($id);
         $status = Status::find($order->id_status);
-        $products = DB::table('orderdetail')->where('id_order',$id)->join('product', 'orderdetail.id_prod','=','product.id_prod')->select('orderdetail.*', 'product.name as nameProd', 'product.price as dongia')->get();
-        $data = [];
-        $sum = 0;
-        foreach($products as $product) {
-            $value = (object)["id_prod" => $product->id_prod,'name' => $product->nameProd, "quantity"=> $product->quantity, "price" => $product->dongia];
-            array_push($data,$value);
-            $sum += ((int) $product->dongia) *((int)$product->quantity);
-        }
+        $products = DB::table('orderdetail')->where('id_order',$id)->join('product', 'orderdetail.id_prod','=','product.id_prod')->select('product.id_prod as id_prod', 'product.name as name', 'product.price as price', 'orderdetail.quantity as quantity')->get();
+        // 
+        $sum =  DB::table('orderdetail')->where('id_order',$id)->join('product', 'orderdetail.id_prod','=','product.id_prod')->sum(DB::raw('product.price * orderdetail.quantity'));
+
+
         $result = (object) [
-            "id_order" => $id,
+            "id_order" => (int)$id,
             "id_user" => $order->id_user,
             "id_status" => $order->id_status,
             "status" => $status->description,
-            "total" => $sum,
-            "data" => $data,
+            "total" => (int)$sum,
+            "data" => $products,
             "created_at" => $order->created_at
         ];
         return $result;

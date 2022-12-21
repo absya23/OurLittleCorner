@@ -29,19 +29,19 @@ const CartPage = () => {
             <p>Hỗ trợ ship 30k cho đơn hàng từ 500k các khu vực khác</p>
             <p>Đơn hàng trên website được xử lý trong giờ hành chính</p>
           </div>
-          <div className="text-right mb-10">
-            <p className="text-2xl font-black text-primary mb-3">
+          <div className="mb-10 text-right">
+            <p className="mb-3 text-2xl font-black text-primary">
               Tổng: {handleFormatNumber(cartContext?.totalMoney())}đ
             </p>
-            <div className="button-group flex w-1/3 ml-auto justify-end gap-x-1">
+            <div className="flex justify-end w-1/3 ml-auto button-group gap-x-1">
               <Button
-                className="w-auto px-5 rounded-3xl bg-primary text-lg hover:bg-hover normal-case"
+                className="w-auto px-5 text-lg normal-case rounded-3xl bg-primary hover:bg-hover"
                 onClick={() => navigate("/product")}
               >
                 Tiếp tục mua sắm
               </Button>
               <Button
-                className="w-auto px-5 rounded-3xl bg-white text-lg border border-primary text-primary hover:bg-secondary hover:text-white normal-case"
+                className="w-auto px-5 text-lg normal-case bg-white border rounded-3xl border-primary text-primary hover:bg-secondary hover:text-white"
                 onClick={() => navigate("/cart/checkout")}
               >
                 Thanh toán
@@ -49,24 +49,24 @@ const CartPage = () => {
             </div>
           </div>
           <section className="product-list-seen">
-            <h4 className="font-bold text-black uppercase text-xl mb-4">
+            <h4 className="mb-4 text-xl font-bold text-black uppercase">
               Các sản phẩm đã xem
             </h4>
-            <div className="w-full flex gap-x-2">
+            <div className="flex w-full gap-x-2">
               <ProductSlide data={productRecently}></ProductSlide>
             </div>
           </section>
         </div>
       ) : (
         <div className="container my-10">
-          <div className="w-full flex gap-x-4">
+          <div className="flex w-full gap-x-4">
             <img src={emptyCart} alt="" className="w-1/2" />
             <div className="flex flex-col items-center justify-center gap-y-2">
               <h2 className="text-2xl font-bold text-secondary">
                 Không có sản phẩm nào 😥
               </h2>
               <Button
-                className="w-auto px-5 rounded-3xl bg-primary text-lg hover:bg-hover normal-case mt-2 mb-4"
+                className="w-auto px-5 mt-2 mb-4 text-lg normal-case rounded-3xl bg-primary hover:bg-hover"
                 onClick={() => navigate("/product")}
               >
                 Mua sắm ngay
@@ -130,9 +130,12 @@ const CartPreviewList = ({
                     alt=""
                     className="max-w-[100px] h-[100px] cursor-pointer"
                     onClick={() =>
-                      navigate(`/${removeVietnameseTones(item.title)}`, {
-                        state: { id: item.id },
-                      })
+                      navigate(
+                        `/product/${removeVietnameseTones(item.title)}`,
+                        {
+                          state: { id: item.id },
+                        }
+                      )
                     }
                   />
                 </td>
@@ -140,9 +143,12 @@ const CartPreviewList = ({
                   <p
                     className="cursor-pointer hover:text-secondary "
                     onClick={() =>
-                      navigate(`/${removeVietnameseTones(item.title)}`, {
-                        state: { id: item.id },
-                      })
+                      navigate(
+                        `/product/${removeVietnameseTones(item.title)}`,
+                        {
+                          state: { id: item.id },
+                        }
+                      )
                     }
                   >
                     {item.title}
@@ -152,7 +158,7 @@ const CartPreviewList = ({
                   <p>{handleFormatNumber(Number(item.price))}đ</p>
                 </td>
                 <td>
-                  <div className="flex w-full justify-center gap-x-1">
+                  <div className="flex justify-center w-full gap-x-1">
                     <InputCombo
                       type="CART"
                       id={item.id}

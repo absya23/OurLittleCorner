@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 const itemsPerPage = 8;
 
 const ProductList = ({ data }) => {
+  // console.log(data);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   // Here we use item offsets; we could also use page offsets
@@ -16,6 +17,7 @@ const ProductList = ({ data }) => {
     const endOffset = itemOffset + itemsPerPage;
     setCurrentItems(data?.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(data?.length / itemsPerPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemOffset, itemsPerPage]);
 
   // Invoke when user click to request another page.
@@ -30,8 +32,8 @@ const ProductList = ({ data }) => {
           currentItems?.map((item, index) => (
             <ProductItem
               key={index}
-              id={item?.id}
-              title={item?.title}
+              id={item?.id_prod}
+              title={item?.name}
               price={item?.price}
               image={item?.image}
             ></ProductItem>
