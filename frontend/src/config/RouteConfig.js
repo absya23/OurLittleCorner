@@ -18,6 +18,10 @@ const ManageCatalog = lazy(() =>
 const ManageOrder = lazy(() =>
   import("../components/pages/manage_order/ManageOrder")
 );
+
+const OrderDetail = lazy(() =>
+  import("../components/pages/manage_order/OrderDetail")
+);
 const ManageProduct = lazy(() =>
   import("../components/pages/manage_product/ManageProduct")
 );
@@ -46,6 +50,10 @@ const RouteConfig = () => {
         <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
         <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>
         <Route path="/admin/manage-order" element={<ManageOrder />}></Route>
+        <Route
+          path="/admin/manage-order/:id_order"
+          element={<OrderDetail />}
+        ></Route>
         <Route path="/admin/manage-product" element={<ManageProduct />}></Route>
         <Route
           path="/admin/manage-product-type"

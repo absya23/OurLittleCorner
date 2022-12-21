@@ -10,22 +10,20 @@ function CustomModal({
   id_prod,
   id_type,
   dataArr,
-  setDataArr,
+  // setDataArr,
 }) {
-  //lấy dữ liệu để chỉnh sửa
-  ////catalog:
-  // let nameCatalog;
-  // if (id_catalog != undefined) {
-  //   nameCatalog =
-  //     dataArr.filter((item) => item.id_catalog == id_catalog).length > 0
-  //       ? dataArr.filter((item) => item.id_catalog == id_catalog)[0].name
-  //       : "";
-  // }
-
-  // console.log(type, " name catalog>>>", nameCatalog);
+  const local = window.localStorage;
+  let currentCatalog = local.getItem("catalog")
+    ? JSON.parse(local.getItem("catalog"))
+    : null;
+  let currentType = local.getItem("type")
+    ? JSON.parse(local.getItem("type"))
+    : null;
+  let currentProduct = local.getItem("product")
+    ? JSON.parse(local.getItem("product"))
+    : null;
 
   const [selectedImage, setSelectedImage] = useState(null);
-  // const didMount = useRef(false);
 
   //Các mảng dữ liệu
   const [catArr, setCatArr] = useState([]);
@@ -33,19 +31,14 @@ function CustomModal({
 
   //state của catalog
   const [addCatInput, setAddCatInput] = useState("");
-  // const [editCatInput, setEditCatInput] = useState(
-  //   dataArr.find((item) => item.id_catalog == id_catalog)
-  //     ? dataArr.find((item) => item.id_catalog == id_catalog).name
-  //     : ""
-  // );
-  const [editCatInput, setEditCatInput] = useState("test");
+  const [editCatInput, setEditCatInput] = useState();
 
   //state của types
   const [addTypeNameInput, setAddTypeNameInput] = useState("");
   const [addTypeOfInput, setAddTypeOfInput] = useState("");
 
-  const [editTypeNameInput, setEditTypeNameInput] = useState();
-  const [editTypeOfInput, setEditTypeOfInput] = useState();
+  const [editTypeNameInput, setEditTypeNameInput] = useState("");
+  const [editTypeOfInput, setEditTypeOfInput] = useState("");
 
   //state của product
   const [addProductNameInput, setAddProductNameInput] = useState("");
@@ -86,7 +79,7 @@ function CustomModal({
       .post("http://localhost:8000/api/catalogue", newItem)
       .then((res) => {
         dataArr.push(newItem);
-        window.handleClose();
+        handleClose();
         alert("đã thêm thành công danh mục sản phẩm");
       })
       .catch((error) => {
@@ -159,6 +152,7 @@ function CustomModal({
       name: editTypeNameInput,
       del_flag: 0,
     };
+    console.log(newItem);
     axios
       .put("http://localhost:8000/api/types/" + id, newItem)
       .then((res) => {
@@ -288,6 +282,32 @@ function CustomModal({
       });
   }, []);
 
+  // useEffect(() => {
+  //   //edit catalog
+  //   currentCatalog = local.getItem("catalog")
+  //     ? JSON.parse(local.getItem("catalog"))
+  //     : null;
+  //   setEditCatInput(currentCatalog.name);
+
+  //   //edit type
+  //   currentType = local.getItem("type")
+  //     ? JSON.parse(local.getItem("type"))
+  //     : null;
+  //   setEditTypeNameInput(currentType ? currentType.name : "");
+  //   setEditTypeOfInput(currentType ? currentType.id_catalog : "");
+
+  //   //edit product
+  //   currentType = local.getItem("product")
+  //     ? JSON.parse(local.getItem("product"))
+  //     : null;
+  //   setEditProductNameInput(currentProduct ? currentProduct.name : "");
+  //   setEditProductOfInput(currentProduct ? currentProduct.id_type : "");
+  //   setEditProductDescInput(currentProduct ? currentProduct.description : "");
+  //   setEditProductPriceInput(currentProduct ? currentProduct.price : "");
+  //   setEditProductQuantityInput(currentProduct ? currentProduct.quantity : "");
+  //   setEditProductImageInput(currentProduct ? currentProduct.image : "");
+  // });
+
   switch (type) {
     //Thêm danh mục
     case "add-catalog":
@@ -399,6 +419,7 @@ function CustomModal({
               </Form.Group>
               <Form.Select
                 aria-label="Default select example"
+                // value={addTypeOfInput}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setAddTypeOfInput(e.target.value);
@@ -440,13 +461,13 @@ function CustomModal({
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên loại sản phẩm..."
-                  // autoFocus
+                  autoFocus
                   value={editTypeNameInput}
                   onChange={(e) => setEditTypeNameInput(e.target.value)}
                 />
               </Form.Group>
               <Form.Select
-                aria-label="Default select example"
+                // value={editTypeOfInput}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setEditTypeOfInput(e.target.value);

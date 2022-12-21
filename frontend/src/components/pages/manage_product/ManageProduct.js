@@ -26,7 +26,10 @@ const ManageProduct = () => {
 
   //hiển thị modal
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = (id) => {
+  const handleEditShow = (id, item) => {
+    const local = window.localStorage;
+    local.setItem("product", JSON.stringify(item));
+    console.log(JSON.parse(local.getItem("product")));
     setEditShow(true);
     SetIdToEdit(id);
   };
@@ -101,7 +104,7 @@ const ManageProduct = () => {
                       <Button
                         variant="outline-success"
                         className="mr-3"
-                        onClick={() => handleEditShow(item.id_prod)}
+                        onClick={() => handleEditShow(item.id_prod, item)}
                       >
                         <i class="bi bi-pencil-fill"></i>
                         Sửa
