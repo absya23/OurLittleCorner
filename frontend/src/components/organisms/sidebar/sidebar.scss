@@ -10,7 +10,7 @@
     width: 260px;
     flex-shrink: 0;
     background-color: $primary-color;
-    height: 100vh;
+    min-height: 100vh;
     overflow: auto;
     // color: $third-color;
     color: $text-color;
