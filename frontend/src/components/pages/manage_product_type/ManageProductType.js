@@ -39,25 +39,29 @@ const ManageProductType = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/catalogue")
-      .then((res) => {
-        // console.log(res.data);
-        setCatArr(res.data.filter((item) => item.del_flag == 0));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchData() {
+      await axios
+        .get("http://localhost:8000/api/catalogue")
+        .then((res) => {
+          // console.log(res.data);
+          setCatArr(res.data.filter((item) => item.del_flag == 0));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-    axios
-      .get("http://localhost:8000/api/types")
-      .then((res) => {
-        // console.log(res.data);
-        setDataArr(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .get("http://localhost:8000/api/types")
+        .then((res) => {
+          // console.log(res.data);
+          setDataArr(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    fetchData();
   }, []);
   return (
     <div className="manage-product-type">

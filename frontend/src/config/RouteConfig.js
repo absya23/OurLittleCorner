@@ -32,6 +32,7 @@ const ManageProductType = lazy(() =>
 const ManageSlide = lazy(() =>
   import("../components/pages/manage_slide/ManageSlide")
 );
+const AdminLogin = lazy(() => import("../components/pages/admin/AdminLogin"));
 
 const CheckoutPage = lazy(() =>
   import("../components/pages/cart/CheckoutPage")
@@ -67,6 +68,8 @@ const RouteConfig = () => {
           path="/admin/manage-product-type"
           element={<ManageProductType />}
         ></Route>
+        <Route path="/admin/login" element={<AdminLogin />}></Route>
+        <Route path="/admin" element={<AdminLogin />}></Route>
       </Routes>
     </>
   );

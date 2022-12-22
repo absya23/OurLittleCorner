@@ -13,8 +13,8 @@ const ManageCatalog = () => {
   const [addShow, setAddShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
-  const [idToEdit, SetIdToEdit] = useState("");
-  const [idToDelete, SetIdToDelete] = useState("");
+  const [idToEdit, setIdToEdit] = useState("");
+  const [idToDelete, setIdToDelete] = useState("");
 
   //tắt modal
   const handleAddClose = () => setAddShow(false);
@@ -23,29 +23,32 @@ const ManageCatalog = () => {
 
   //hiển thị modal
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = (id, item) => {
-    const local = window.localStorage;
-    local.setItem("catalog", JSON.stringify(item));
-    console.log(JSON.parse(local.getItem("catalog")));
+  const handleEditShow = (id) => {
+    // const local = window.localStorage;
+    // local.setItem("catalog", JSON.stringify(item));
+    // console.log(JSON.parse(local.getItem("catalog")));
     setEditShow(true);
-    SetIdToEdit(id);
+    setIdToEdit(id);
   };
   const handleDeleteShow = (id) => {
     setDeleteShow(true);
-    SetIdToDelete(id);
+    setIdToDelete(id);
   };
 
   useEffect(() => {
     // test
-    axios
-      .get("http://localhost:8000/api/catalogue")
-      .then((res) => {
-        console.log(res.data);
-        setDataArr(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchData() {
+      await axios
+        .get("http://localhost:8000/api/catalogue")
+        .then((res) => {
+          console.log(res.data);
+          setDataArr(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
   }, []);
 
   return (
@@ -76,7 +79,7 @@ const ManageCatalog = () => {
                       <Button
                         variant="outline-success"
                         className="mr-3"
-                        onClick={() => handleEditShow(item.id_catalog, item)}
+                        onClick={() => handleEditShow(item.id_catalog)}
                       >
                         <i class="bi bi-pencil-fill"></i>
                         Sửa
@@ -106,6 +109,7 @@ const ManageCatalog = () => {
         handleClose={handleEditClose}
         id_catalog={idToEdit}
         dataArr={dataArr}
+        setDataArr={setDataArr}
       />
       <CustomModal
         type="delete-catalog"
