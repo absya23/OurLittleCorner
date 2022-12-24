@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const message = "Bạn đã đạt đến số lượng tối đa có sẵn cho mặt hàng này";
 
 const InputCombo = ({
-  // type = cart thì input dùng để sửa cart
-  // type = "ADD" thì thêm product vào cart
-  type = "CART",
   id = 1,
   className,
   // số lượng khi thêm vào, mặc định là 1
   quantity = 1,
   // số lượng còn lại trong kho,
   max = 10,
+  // api
+  // setTemp = () => {},
   // hàm change quantity nếu type = "CART"
   action = () => {},
-  // hàm cập nhật số lượng sản phẩm để thêm vào cart
-  handleQuantity = () => {},
   ...props
 }) => {
   const [count, setCount] = useState(quantity);
@@ -24,15 +21,18 @@ const InputCombo = ({
   const handleDecrease = () => {
     if (count > 1) {
       setCount((prev) => prev - 1);
+      action(count - 1);
       setNoti(false);
     }
   };
   const handleIncrease = () => {
-    if (count == maximum) {
+    if (Number(count) === Number(maximum)) {
       setCount(maximum);
+      action(maximum);
       setNoti(true);
     } else {
       setCount((prev) => prev + 1);
+      action(count + 1);
       setNoti(false);
     }
   };
@@ -40,22 +40,20 @@ const InputCombo = ({
     setCount(e.target.value);
   };
   const handleBlur = (e) => {
-    if (e.target.value === "") {
+    if (e.target.value === "" || Number(e.target.value) === 0) {
       setCount(1);
+      action(1);
       setNoti(false);
-    }
-    if (count > maximum) {
+    } else if (count > maximum) {
       setCount(maximum);
+      action(maximum);
       setNoti(true);
+    } else {
+      setCount(e.target.value);
+      action(e.target.value);
     }
   };
 
-  // ----fix
-  useEffect(() => {
-    if (type === "CART") action(id, count);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    if (type === "ADD") handleQuantity(count);
-  }, [count]);
   return (
     <div
       className={`flex flex-col justify-start items-start gap-y-2 ${className}`}

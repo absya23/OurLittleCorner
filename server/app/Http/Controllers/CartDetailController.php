@@ -38,7 +38,28 @@ class CartDetailController extends Controller
      */
     public function store(Request $request)
     {
+        
         //
+        if(!$request->id_user || !$request->id_prod || !$request->quantity) return ['status'=>0,'message'=>'thiếu 1 trong 3 trường id_user, id_prod, quantity'];
+        // 
+        $id_prod = $request->id_prod;
+        $cartDt = DB::table('cartdetail')->where('id_prod', $id_prod)->first();
+        
+        if($cartDt) {
+            $temp = (int) $cartDt->quantity + (int) $request->quantity;
+            DB::table('cartdetail')->where('id_prod', $id_prod)->update(["quantity" => $temp]);
+
+            return ['status'=>1,'message'=>'cartDetail updated', 'data'=> $cartDt];
+        }
+        else {
+            $cartDetail = new CartDetail();
+            $cartDetail->id_user = $request->id_user;
+            $cartDetail->id_prod = $request->id_prod;
+            $cartDetail->quantity = $request->quantity;
+    
+            $cartDetail->save();
+            return ['status'=>1,'message'=>'cartDetail created', 'data'=> $cartDetail];
+        }
     }
 
     /**
@@ -51,9 +72,10 @@ class CartDetailController extends Controller
     {
         //
         $totalMoney =  DB::table("cartdetail")->where("id_user",$id_user)->join("product", "cartdetail.id_prod", "=","product.id_prod")->sum(DB::raw('product.price * cartdetail.quantity'));
+        $totalQuantity = DB::table("cartdetail")->where("id_user",$id_user)->sum(DB::raw('cartdetail.quantity'));
         // 
-        $userCart = DB::table("cartdetail")->where("id_user",$id_user)->join("product", "cartdetail.id_prod", "=","product.id_prod")->select("cartdetail.*", "product.name as nameProd", "product.price as price")->get();
-        return ["totalMoney"=>$totalMoney, "data" => $userCart];
+        $userCart = DB::table("cartdetail")->where("id_user",$id_user)->join("product", "cartdetail.id_prod", "=","product.id_prod")->select("cartdetail.*", "product.name as name", "product.price as price", "product.quantity as stock", "product.image as image")->get();
+        return ["totalMoney"=> (int)$totalMoney,"totalQuantity" => (int)$totalQuantity, "data" => $userCart];
     }
 
     /**
@@ -77,6 +99,11 @@ class CartDetailController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $cart = CartDetail::find($id);
+        $cart->update($request->all());
+        $cart->save();
+
+        return ['status'=>1,'message'=> 'cartdetail edited', 'catalogue' => $cart];
     }
 
     /**
@@ -88,5 +115,26 @@ class CartDetailController extends Controller
     public function destroy($id)
     {
         //
+        $cart = CartDetail::find($id);
+        $cart->delete();
+        // $image->update(["del_flag"=>1]);
+        // $image->save();
+        return ['status'=>1,'message'=> 'delete successfully!', 'cart' => $cart];
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteCarts(Request $request)
+    {
+        $data = json_decode($request->data, true);
+        // return ['data'=>$data];
+        foreach($data as $item) {
+            $cart = CartDetail::find((Int)$item);
+            if($cart) $cart->delete();
+        }
+        return [];
     }
 }

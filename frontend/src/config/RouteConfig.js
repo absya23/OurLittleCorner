@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Main from "../components/layout/Main";
-import NotFound from "../components/pages/NotFound";
 
 const HomePage = lazy(() => import("../components/pages/homepage/HomePage"));
 const ProductPage = lazy(() =>
@@ -34,6 +33,14 @@ const CheckoutPage = lazy(() =>
 );
 const ProfilePage = lazy(() => import("../components/pages/user/ProfilePage"));
 
+const SearchPage = lazy(() =>
+  import("../components/pages/productpage/SearchPage")
+);
+
+const UserOrderDetail = lazy(() =>
+  import("../components/pages/user/UserOrderDetail")
+);
+
 const RouteConfig = () => {
   return (
     <>
@@ -41,15 +48,19 @@ const RouteConfig = () => {
         <Route element={<Main></Main>}>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
-          {/* <Route path="/product/:title" element={<ProductPage />}></Route> */}
+          <Route path="/search" element={<SearchPage />}></Route>
           <Route path="/user/signin" element={<SignInPage />}></Route>
           <Route path="/user/signup" element={<SignUpPage />}></Route>
+          <Route
+            path="/user/order/:id_order"
+            element={<UserOrderDetail />}
+          ></Route>
           <Route path="/cart" element={<CartPage />}></Route>
           <Route path="/cart/checkout" element={<CheckoutPage />}></Route>
           <Route path="/product/:title" element={<SingleProduct />}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/test" element={<div>test</div>}></Route>
-          <Route path="*" element={<NotFound></NotFound>}></Route>
+          <Route path="*" element={<Navigate to="/" replace />}></Route>
         </Route>
         <Route path="/admin/manage-slide" element={<ManageSlide />}></Route>
         <Route path="/admin/manage-catalog" element={<ManageCatalog />}></Route>

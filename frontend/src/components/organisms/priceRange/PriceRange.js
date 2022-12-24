@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import handleFormatNumber from "../../../handlers/handleFormatNumber";
 import PartTitle from "../../atoms/PartTitle";
 import "./PriceRange.scss";
 
 const PriceRange = () => {
+  const navigate = useNavigate();
   const [min, setMin] = useState("0");
-  const [max, setMax] = useState("1500000");
+  const [max, setMax] = useState("500000");
   // const nodeRef = useRef(null);
   useEffect(() => {
     const rangeInput = document.querySelectorAll(".range-input input"),
@@ -26,13 +28,9 @@ const PriceRange = () => {
         } else {
           setMin(minVal);
           setMax(maxVal);
-          // range.style.width =
-          //   100 -
-          //   (maxVal / rangeInput[1].max) * 100 -
-          //   (minVal / rangeInput[0].max) * 100 +
-          //   "%";
           range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
           range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+          navigate(`/product?priceFrom=${minVal}&priceTo=${maxVal}`);
         }
       });
     });
@@ -43,7 +41,7 @@ const PriceRange = () => {
       <PartTitle title="GIÁ" className="uppercase"></PartTitle>
       <div className="w-full h-[1px] bg-primary mb-3"></div>
       <div className="price-filter">
-        <div className="flex gap-x-2 mb-4">
+        <div className="flex mb-4 gap-x-2">
           Từ
           <span id="price-from">{handleFormatNumber(Number(min))}đ</span>
           <span>
@@ -72,16 +70,16 @@ const PriceRange = () => {
             type="range"
             className="range-min"
             min="0"
-            max="1500000"
+            max="500000"
             value={min}
-            step="1000"
+            step="5000"
             onChange={(e) => setMin(e.target.value)}
           />
           <input
             type="range"
             className="range-max"
             min="0"
-            max="1500000"
+            max="500000"
             value={max}
             step="1000"
             onChange={(e) => setMax(e.target.value)}

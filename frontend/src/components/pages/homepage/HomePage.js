@@ -8,14 +8,6 @@ import Category from "../../molecules/category/Category";
 import ProductTitle from "../../atoms/ProductTitle";
 import CarouselCenter from "../../molecules/carousel/CarouselCenter";
 
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import {
-  handleFetchCata,
-  handleFetchProduct,
-  handleFetchType,
-} from "../../../redux/handlers";
-
 const HomePage = () => {
   // useEffect(() => {
   //   // test
@@ -28,16 +20,11 @@ const HomePage = () => {
   //       console.log(error);
   //     });
   // });
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(handleFetchProduct());
-    dispatch(handleFetchCata());
-    dispatch(handleFetchType());
-  }, [dispatch]);
+
   return (
     <div className="homepage">
       <SliderGroup></SliderGroup>
-      <Product title="Sản phẩm mới"></Product>
+      <Product title="Sản phẩm mới" type="new"></Product>
       <Product title="Chủ đề mới" length={4}>
         <Category></Category>
       </Product>

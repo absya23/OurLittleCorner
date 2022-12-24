@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import slide1 from "../../../assets/slider/slide1.jpg";
 import slide2 from "../../../assets/slider/slide2.jpg";
 import slide3 from "../../../assets/slider/slide3.png";
 import banner1 from "../../../assets/slider/banner1.jpg";
 import banner2 from "../../../assets/slider/banner2.jpg";
 import { Carousel } from "react-carousel-minimal";
+import { useEffect } from "react";
+import axios from "axios";
 
 // data phải có chứa trường image
 const dataSlide = [
-  { id: 1, image: slide1 },
-  { id: 2, image: slide2 },
-  { id: 3, image: slide3 },
+  { id_slide: 1, image: slide1 },
+  { id_slide: 2, image: slide2 },
+  { id_slide: 3, image: slide3 },
 ];
 
 const SliderGroup = () => {
+  const [slides, setSlides] = useState(dataSlide);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/slide")
+      .then((res) => {
+        // console.log(res.data);
+        setSlides(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <section className="mb-20 slider-group">
       <div className="grid grid-cols-4 gap-x-[10px] h-[400px]">
         <Carousel
-          data={dataSlide}
+          data={slides}
           time={2000}
           captionPosition="bottom"
           automatic={true}

@@ -4,15 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Input from "../../atoms/Input";
 import Button from "../../atoms/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useUser } from "../../../context/userContext";
 
 const validateSchema = yup
   .object({
     username: yup.string().required("Trường này không được để trống"),
-    password: yup
-      .string()
-      .min(8, "Tối thiểu 8 kí tự")
-      .required("Trường này không được để trống"),
+    password: yup.string().required("Trường này không được để trống"),
   })
   .required();
 
@@ -22,10 +21,34 @@ const SignInForm = () => {
     control,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(validateSchema), mode: "onChange" });
+
+  const userContext = useUser();
+  // let navigate = useNavigate();
+
   const onSubmit = (data) => {
     // gọi API ở đây để check -> sign in
     console.log({ data });
+
+    //
+    axios
+      .post("http://localhost:8000/api/user/login", {
+        username: data.username,
+        password: data.password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === 1) {
+          userContext.updateProfile({ ...res.data.data });
+          window.location.reload();
+        } else {
+          alert("Đăng nhập thất bại! Sai username hoặc password");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -75,19 +98,19 @@ const SignInForm = () => {
         >
           Quên mật khẩu
         </Link>
-        <p className="mb-4 text-lg">Hoặc đăng nhập với</p>
+        {/* <p className="mb-4 text-lg">Hoặc đăng nhập với</p>
         <div className="logFb w-full bg-[#2e4b88] mb-2">
           <a href="/" className="inline-block w-full py-2 text-sm text-white">
-            <i class="fa-brands fa-facebook-f mr-2"></i>
+            <i className="mr-2 fa-brands fa-facebook-f"></i>
             <span>Đăng nhập bằng facebook</span>
           </a>
         </div>
         <div className="logGg w-full bg-[#ea4235] mb-4 text-sm">
           <a href="/" className="inline-block w-full py-2 text-white">
-            <i class="fa-brands fa-google mr-2"></i>
+            <i className="mr-2 fa-brands fa-google"></i>
             <span>Đăng nhập Google</span>
           </a>
-        </div>
+        </div> */}
       </div>
     </form>
   );
