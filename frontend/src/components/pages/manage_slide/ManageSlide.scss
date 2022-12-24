@@ -14,7 +14,12 @@
     td,
     th {
         text-align: center;
-        line-height: 50px;
+        line-height: 50px
+    }
+
+    td > img {
+        margin-left: 90px;
+        height: 100px;
     }
 
     button>i {

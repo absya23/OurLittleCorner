@@ -7,22 +7,42 @@ import { Button, Table, Form, Modal } from "react-bootstrap";
 import CustomModal from "../../organisms/modal/CustomModal";
 import Toolbar from "../../organisms/toolbar/Toolbar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const changeStatus = ({ id_order, id_status }) => {
-  axios
-    .put("http://localhost:8000/api/order" + id_order, {
-      id_status: 1 + id_status,
-    })
-    .then((res) => {
-      // console.log(res.data);
-      // setUserArr(res.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+const HandlingStatus = ({ id_order, id_status, dataArr, setDataArr }) => {
+  const changeStatus = async (id_order, id_status) => {
+    await axios
+      .put("http://localhost:8000/api/orders/" + id_order, {
+        id_status: String(1 + id_status),
+      })
+      .then((res) => {
+        dataArr.find((item) => item.id_order == id_order).id_status = String(
+          1 + id_status
+        );
+        setDataArr(dataArr);
+        alert("Đổi trạng thái đơn hàng thành công");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-const handlingStatus = ({ id_order, id_status }) => {
+  const cancelOrder = async (id_order) => {
+    await axios
+      .put("http://localhost:8000/api/orders/" + id_order, {
+        id_status: "4",
+      })
+      .then((res) => {
+        dataArr.find((item) => item.id_order == id_order).id_status = "4";
+        setDataArr(dataArr);
+        alert("Hủy đơn hàng thành công");
+        window.location.reload(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   switch (id_status) {
     case 1:
       return (
@@ -30,20 +50,46 @@ const handlingStatus = ({ id_order, id_status }) => {
           <Button
             variant="outline-success"
             className="mr-3"
-            onClick={() => changeStatus()}
+            onClick={() => changeStatus(id_order, id_status)}
           >
             <i class="bi bi-pencil-fill"></i>
             Xác nhận
           </Button>{" "}
-          <Button variant="outline-danger" onClick={() => {}}>
-            <i class="bi bi-trash3-fill"></i>Hủy đơn
+          <Button
+            variant="outline-danger"
+            onClick={() => cancelOrder(id_order)}
+          >
+            <i class="bi bi-trash3-fill"></i>Hủy
           </Button>{" "}
         </>
       );
+    case 2:
+      return (
+        <>
+          <Button
+            variant="outline-success"
+            className="mr-3"
+            onClick={() => changeStatus(id_order, id_status)}
+          >
+            <i class="bi bi-pencil-fill"></i>
+            Đã giao
+          </Button>{" "}
+          <Button
+            variant="outline-danger"
+            onClick={() => cancelOrder(id_order)}
+          >
+            <i class="bi bi-trash3-fill"></i>Hủy
+          </Button>{" "}
+        </>
+      );
+    default:
+      return <></>;
   }
 };
 
 const ManageOrder = () => {
+  let navigate = useNavigate();
+
   const [addShow, setAddShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
   const [deleteShow, setDeleteShow] = useState(false);
@@ -55,29 +101,32 @@ const ManageOrder = () => {
   const handleEditClose = () => setEditShow(false);
   const handleDeleteClose = () => setDeleteShow(false);
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = () => setEditShow(true);
-  const handleDeleteShow = () => setDeleteShow(true);
+  // const handleEditShow = () => setEditShow(true);
+  // const handleDeleteShow = () => setDeleteShow(true);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/user")
-      .then((res) => {
-        // console.log(res.data);
-        setUserArr(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchData() {
+      await axios
+        .get("http://localhost:8000/api/user")
+        .then((res) => {
+          // console.log(res.data);
+          setUserArr(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-    axios
-      .get("http://localhost:8000/api/orders")
-      .then((res) => {
-        // console.log(res.data);
-        setDataArr(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .get("http://localhost:8000/api/orders")
+        .then((res) => {
+          // console.log(res.data);
+          setDataArr(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
   }, []);
   return (
     <div className="manage-order">
@@ -98,7 +147,8 @@ const ManageOrder = () => {
               <th>Tổng tiền</th>
               <th>Ngày tạo</th>
               <th>Trạng thái</th>
-              <th>Thao tác</th>
+              <th>Cập nhật</th>
+              <th>Chi tiết</th>
             </tr>
           </thead>
           <tbody>
@@ -117,28 +167,29 @@ const ManageOrder = () => {
                       ? userArr.find((el) => el.id_user === item.id_user).phone
                       : "Khác"}
                   </td>
-                  <td>{item.total}</td>
+                  <td>{item.totalMoney}</td>
                   <td>{item.created_at}</td>
+                  <td>{item.statusName}</td>
                   <td>
-                    {
-                      <handlingStatus
-                        id_status={item.id_status}
-                        id_order={item.id_order}
-                      />
-                    }
+                    <HandlingStatus
+                      id_status={item.id_status}
+                      id_order={item.id_order}
+                      dataArr={dataArr}
+                      setDataArr={setDataArr}
+                    />
                   </td>
                   <td>
                     <Button
-                      variant="outline-success"
-                      className="mr-3"
-                      onClick={handleEditShow}
+                      variant="outline-info"
+                      className="ml-3"
+                      onClick={() => {
+                        //chuyển qua trang info
+                        navigate(`/admin/manage-order/${item.id_order}`);
+                      }}
                     >
                       <i class="bi bi-pencil-fill"></i>
-                      Sửa
-                    </Button>{" "}
-                    <Button variant="outline-danger" onClick={handleDeleteShow}>
-                      <i class="bi bi-trash3-fill"></i>Xóa
-                    </Button>{" "}
+                      Chi tiết
+                    </Button>
                   </td>
                 </tr>
               );
@@ -146,21 +197,6 @@ const ManageOrder = () => {
           </tbody>
         </Table>
       </div>
-      <CustomModal
-        type="add-catalog"
-        show={addShow}
-        handleClose={handleAddClose}
-      />
-      <CustomModal
-        type="edit-catalog"
-        show={editShow}
-        handleClose={handleEditClose}
-      />
-      <CustomModal
-        type="delete-order"
-        show={deleteShow}
-        handleClose={handleDeleteClose}
-      />
     </div>
   );
 };

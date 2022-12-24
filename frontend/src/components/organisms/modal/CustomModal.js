@@ -9,23 +9,22 @@ function CustomModal({
   id_catalog,
   id_prod,
   id_type,
+  id_slide,
   dataArr,
-  setDataArr,
+  // setDataArr,
 }) {
-  //lấy dữ liệu để chỉnh sửa
-  ////catalog:
-  // let nameCatalog;
-  // if (id_catalog != undefined) {
-  //   nameCatalog =
-  //     dataArr.filter((item) => item.id_catalog == id_catalog).length > 0
-  //       ? dataArr.filter((item) => item.id_catalog == id_catalog)[0].name
-  //       : "";
-  // }
-
-  // console.log(type, " name catalog>>>", nameCatalog);
+  // const local = window.localStorage;
+  // let currentCatalog = local.getItem("catalog")
+  //   ? JSON.parse(local.getItem("catalog"))
+  //   : null;
+  // let currentType = local.getItem("type")
+  //   ? JSON.parse(local.getItem("type"))
+  //   : null;
+  // let currentProduct = local.getItem("product")
+  //   ? JSON.parse(local.getItem("product"))
+  //   : null;
 
   const [selectedImage, setSelectedImage] = useState(null);
-  // const didMount = useRef(false);
 
   //Các mảng dữ liệu
   const [catArr, setCatArr] = useState([]);
@@ -33,19 +32,14 @@ function CustomModal({
 
   //state của catalog
   const [addCatInput, setAddCatInput] = useState("");
-  // const [editCatInput, setEditCatInput] = useState(
-  //   dataArr.find((item) => item.id_catalog == id_catalog)
-  //     ? dataArr.find((item) => item.id_catalog == id_catalog).name
-  //     : ""
-  // );
-  const [editCatInput, setEditCatInput] = useState("test");
+  const [editCatInput, setEditCatInput] = useState("");
 
   //state của types
   const [addTypeNameInput, setAddTypeNameInput] = useState("");
   const [addTypeOfInput, setAddTypeOfInput] = useState("");
 
-  const [editTypeNameInput, setEditTypeNameInput] = useState();
-  const [editTypeOfInput, setEditTypeOfInput] = useState();
+  const [editTypeNameInput, setEditTypeNameInput] = useState("");
+  const [editTypeOfInput, setEditTypeOfInput] = useState("");
 
   //state của product
   const [addProductNameInput, setAddProductNameInput] = useState("");
@@ -61,77 +55,84 @@ function CustomModal({
   const [editProductDescInput, setEditProductDescInput] = useState("");
   const [editProductQuantityInput, setEditProductQuantityInput] = useState("");
 
+  //state của slide
+  const [addSlideInput, setAddSlideInput] = useState("");
+  // const [editSlideInput, setEditSlideInput] = useState("");
+
   //Hàm upload ảnh
-  const uploadImage = (image) => {
+  const uploadImage = async (image) => {
     const formData = new FormData();
     formData.append("file", image);
     formData.append("upload_preset", "xfubk0t8");
 
-    axios
+    await axios
       .post("https://api.cloudinary.com/v1_1/djt9g7wvi/image/upload", formData)
       .then((res) => {
         console.log(res);
         console.log("url ảnh>>>>", res.data.secure_url);
         setAddProductImageInput(res.data.secure_url);
+        setEditProductImageInput(res.data.secure_url);
+        setAddSlideInput(res.data.secure_url);
+        // setEditSlideInput(res.data.secure_url);
       });
   };
 
   //Thêm sửa xóa catalog
-  const addCatalog = () => {
+  const addCatalog = async () => {
     const newItem = {
       name: addCatInput,
       del_flag: 0,
     };
-    axios
+    await axios
       .post("http://localhost:8000/api/catalogue", newItem)
       .then((res) => {
         dataArr.push(newItem);
-        window.handleClose();
+        handleClose();
         alert("đã thêm thành công danh mục sản phẩm");
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error);
         alert("thêm danh mục sản phẩm thất bại");
       });
   };
-  const editCatalog = (id) => {
+  const editCatalog = async (id) => {
     const newItem = {
-      id_catalog: id,
       name: editCatInput,
-      del_flag: 0,
     };
-    axios
+    console.log("edit catalog >>>", editCatInput);
+    await axios
       .put("http://localhost:8000/api/catalogue/" + id, newItem)
       .then((res) => {
         dataArr.find((el) => el.id_catalog == id).name = editCatInput;
         handleClose();
         alert("đã sửa thành công danh mục sản phẩm");
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error);
         alert("sửa danh mục sản phẩm thất bại");
       });
   };
-  const deleteCatalog = (id) => {
-    axios
+  const deleteCatalog = async (id) => {
+    await axios
       .delete("http://localhost:8000/api/catalogue/" + id)
-      .then((res) => {
-        dataArr.forEach((item, i) => {
-          if (item.id_catalog == id) {
-            dataArr.splice(i, 1);
-          }
-        });
-        handleClose();
-        alert("đã xóa thành công danh mục sản phẩm");
-      })
+      .then((res) => {})
       .catch((error) => {
         console.log(error);
-        alert("xóa danh mục sản phẩm thất bại");
       });
+    dataArr.forEach((item, i) => {
+      if (item.id_catalog == id) {
+        dataArr.splice(i, 1);
+      }
+    });
+    alert("đã xóa thành công danh mục sản phẩm");
+    handleClose();
+    window.location.reload(false);
   };
 
   //Thêm sửa xóa types
-  const addType = () => {
+  const addType = async () => {
     const newItem = {
       id_catalog: addTypeOfInput,
       name: addTypeNameInput,
@@ -139,7 +140,7 @@ function CustomModal({
       created_at: null,
       updated_at: null,
     };
-    axios
+    await axios
       .post("http://localhost:8000/api/types", newItem)
       .then((res) => {
         dataArr.push(newItem);
@@ -152,14 +153,15 @@ function CustomModal({
         alert("thêm loại sản phẩm thất bại");
       });
   };
-  const editType = (id) => {
+  const editType = async (id) => {
     const newItem = {
       id_type: id,
       id_catalog: editTypeOfInput,
       name: editTypeNameInput,
       del_flag: 0,
     };
-    axios
+    console.log(newItem);
+    await axios
       .put("http://localhost:8000/api/types/" + id, newItem)
       .then((res) => {
         //xử lý UI
@@ -177,8 +179,8 @@ function CustomModal({
         alert("sửa loại sản phẩm thất bại");
       });
   };
-  const deleteType = (id) => {
-    axios
+  const deleteType = async (id) => {
+    await axios
       .delete("http://localhost:8000/api/types/" + id)
       .then((res) => {
         alert("đã xóa thành công loại sản phẩm");
@@ -206,7 +208,7 @@ function CustomModal({
       quantity: addProductQuantityInput,
       del_flag: 0,
     };
-    axios
+    await axios
       .post("http://localhost:8000/api/product", newItem)
       .then((res) => {
         alert("đã thêm thành công sản phẩm");
@@ -219,18 +221,16 @@ function CustomModal({
     dataArr.push(newItem);
   };
 
-  const editProduct = (id) => {
+  const editProduct = async (id) => {
     const newItem = {
-      id_prod: id,
       id_type: editProductOfInput,
       name: editProductNameInput,
       price: editProductPriceInput,
       image: editProductImageInput,
       description: editProductDescInput,
       quantity: editProductQuantityInput,
-      del_flag: 0,
     };
-    axios
+    await axios
       .put("http://localhost:8000/api/product/" + id, newItem)
       .then((res) => {
         alert("đã sửa thành công sản phẩm");
@@ -248,8 +248,8 @@ function CustomModal({
     dataArr.find((el) => el.id_prod == id).description = editProductDescInput;
     dataArr.find((el) => el.id_prod == id).quantity = editProductQuantityInput;
   };
-  const deleteProduct = (id) => {
-    axios
+  const deleteProduct = async (id) => {
+    await axios
       .delete("http://localhost:8000/api/product/" + id)
       .then((res) => {
         alert("đã xóa thành công sản phẩm");
@@ -266,27 +266,109 @@ function CustomModal({
     });
   };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/catalogue")
+  //Thêm sửa xóa slide
+  const addSlide = async () => {
+    const newItem = {
+      image: addSlideInput,
+    };
+    await axios
+      .post("http://localhost:8000/api/slide", newItem)
       .then((res) => {
-        // console.log(res.data);
-        setCatArr(res.data.filter((item) => item.del_flag == 0));
+        dataArr.push(newItem);
+        handleClose();
+        alert("đã thêm thành công slide");
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error);
+        alert("thêm slide thất bại");
       });
+  };
+  // const editSlide = (id) => {
+  //   const newItem = {
+  //     image: editSlideInput,
+  //   };
+  //   axios
+  //     .put("http://localhost:8000/api/slide/" + id, newItem)
+  //     .then((res) => {
+  //       dataArr.find((el) => el.id_slide == id).name = editSlideInput;
+  //       handleClose();
+  //       alert("đã sửa thành công slide");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       alert("sửa slide thất bại");
+  //     });
+  // };
+  const deleteSlide = async (id) => {
+    await axios
+      .delete("http://localhost:8000/api/slide/" + id)
+      .then((res) => {
+        dataArr.forEach((item, i) => {
+          if (item.id_slide == id) {
+            dataArr.splice(i, 1);
+          }
+        });
+        handleClose();
+        alert("đã xóa thành công slide");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("xóa slide thất bại");
+      });
+  };
 
-    axios
-      .get("http://localhost:8000/api/types")
-      .then((res) => {
-        // console.log(res.data);
-        setTypeArr(res.data.filter((item) => item.del_flag == 0));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  useEffect(() => {
+    async function fetchData() {
+      await axios
+        .get("http://localhost:8000/api/catalogue")
+        .then((res) => {
+          // console.log(res.data);
+          setCatArr(res.data.filter((item) => item.del_flag == 0));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      await axios
+        .get("http://localhost:8000/api/types")
+        .then((res) => {
+          // console.log(res.data);
+          setTypeArr(res.data.filter((item) => item.del_flag == 0));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   //edit catalog
+  //   currentCatalog = local.getItem("catalog")
+  //     ? JSON.parse(local.getItem("catalog"))
+  //     : null;
+  //   setEditCatInput(currentCatalog.name);
+
+  //   //edit type
+  //   currentType = local.getItem("type")
+  //     ? JSON.parse(local.getItem("type"))
+  //     : null;
+  //   setEditTypeNameInput(currentType ? currentType.name : "");
+  //   setEditTypeOfInput(currentType ? currentType.id_catalog : "");
+
+  //   //edit product
+  //   currentType = local.getItem("product")
+  //     ? JSON.parse(local.getItem("product"))
+  //     : null;
+  //   setEditProductNameInput(currentProduct ? currentProduct.name : "");
+  //   setEditProductOfInput(currentProduct ? currentProduct.id_type : "");
+  //   setEditProductDescInput(currentProduct ? currentProduct.description : "");
+  //   setEditProductPriceInput(currentProduct ? currentProduct.price : "");
+  //   setEditProductQuantityInput(currentProduct ? currentProduct.quantity : "");
+  //   setEditProductImageInput(currentProduct ? currentProduct.image : "");
+  // });
 
   switch (type) {
     //Thêm danh mục
@@ -399,6 +481,7 @@ function CustomModal({
               </Form.Group>
               <Form.Select
                 aria-label="Default select example"
+                // value={addTypeOfInput}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setAddTypeOfInput(e.target.value);
@@ -440,13 +523,13 @@ function CustomModal({
                 <Form.Control
                   type="text"
                   placeholder="Nhập tên loại sản phẩm..."
-                  // autoFocus
+                  autoFocus
                   value={editTypeNameInput}
                   onChange={(e) => setEditTypeNameInput(e.target.value)}
                 />
               </Form.Group>
               <Form.Select
-                aria-label="Default select example"
+                // value={editTypeOfInput}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setEditTypeOfInput(e.target.value);
@@ -657,11 +740,28 @@ function CustomModal({
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Ảnh</Form.Label>
+                {selectedImage && (
+                  <div>
+                    <img
+                      alt="not fount"
+                      width={"250px"}
+                      src={URL.createObjectURL(selectedImage)}
+                    />
+                    <br />
+                  </div>
+                )}
                 <Form.Control
-                  type="text"
-                  placeholder="Chưa up ảnh được..."
+                  type="file"
+                  // multiple
+                  placeholder="Nhập ảnh..."
                   autoFocus
+                  onChange={(event) => {
+                    console.log(event.target.files[0]);
+                    setSelectedImage(event.target.files[0]);
+                    uploadImage(event.target.files[0]);
+                  }}
                 />
+                <button onClick={() => setSelectedImage(null)}>Remove</button>
               </Form.Group>
               <Form.Group
                 className="mb-3"
@@ -718,24 +818,6 @@ function CustomModal({
           </Modal.Footer>
         </Modal>
       );
-    //Xóa đơn hàng
-    case "delete-order":
-      return (
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Xóa đơn hàng</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Bạn có chắc xóa?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Hủy
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Xóa
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      );
     //Thêm slide
     case "add-slide":
       return (
@@ -768,20 +850,10 @@ function CustomModal({
                   onChange={(event) => {
                     console.log(event.target.files[0]);
                     setSelectedImage(event.target.files[0]);
+                    uploadImage(event.target.files[0]);
                   }}
                 />
                 <button onClick={() => setSelectedImage(null)}>Remove</button>
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Tên slide</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập tên danh mục..."
-                  autoFocus
-                />
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -789,51 +861,61 @@ function CustomModal({
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={addSlide}>
               Thêm
             </Button>
           </Modal.Footer>
         </Modal>
       );
-    //Sửa slide
-    case "edit-slide":
-      return (
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Sửa slide</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Ảnh</Form.Label>
-                <Form.Control type="text" placeholder="Nhập ảnh..." autoFocus />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Tên slide</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập tên danh mục..."
-                  autoFocus
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Hủy
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Lưu
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      );
+    // //Sửa slide
+    // case "edit-slide":
+    //   return (
+    //     <Modal show={show} onHide={handleClose}>
+    //       <Modal.Header closeButton>
+    //         <Modal.Title>Sửa slide</Modal.Title>
+    //       </Modal.Header>
+    //       <Modal.Body>
+    //         <Form>
+    //           <Form.Group
+    //             className="mb-3"
+    //             controlId="exampleForm.ControlInput1"
+    //           >
+    //             <Form.Label>Ảnh</Form.Label>
+    //             {selectedImage && (
+    //               <div>
+    //                 <img
+    //                   alt="not fount"
+    //                   width={"250px"}
+    //                   src={URL.createObjectURL(selectedImage)}
+    //                 />
+    //                 <br />
+    //               </div>
+    //             )}
+    //             <Form.Control
+    //               type="file"
+    //               // multiple
+    //               placeholder="Nhập ảnh..."
+    //               autoFocus
+    //               onChange={(event) => {
+    //                 console.log(event.target.files[0]);
+    //                 setSelectedImage(event.target.files[0]);
+    //                 uploadImage(event.target.files[0]);
+    //               }}
+    //             />
+    //             <button onClick={() => setSelectedImage(null)}>Remove</button>
+    //           </Form.Group>
+    //         </Form>
+    //       </Modal.Body>
+    //       <Modal.Footer>
+    //         <Button variant="secondary" onClick={handleClose}>
+    //           Hủy
+    //         </Button>
+    //         <Button variant="primary" onClick={() => editSlide(id_slide)}>
+    //           Thêm
+    //         </Button>
+    //       </Modal.Footer>
+    //     </Modal>
+    //   );
     //Xóa slide
     case "delete-slide":
       return (
@@ -846,7 +928,7 @@ function CustomModal({
             <Button variant="secondary" onClick={handleClose}>
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={() => deleteSlide(id_slide)}>
               Xóa
             </Button>
           </Modal.Footer>

@@ -26,7 +26,10 @@ const ManageProduct = () => {
 
   //hiển thị modal
   const handleAddShow = () => setAddShow(true);
-  const handleEditShow = (id) => {
+  const handleEditShow = (id, item) => {
+    const local = window.localStorage;
+    local.setItem("product", JSON.stringify(item));
+    console.log(JSON.parse(local.getItem("product")));
     setEditShow(true);
     SetIdToEdit(id);
   };
@@ -36,25 +39,29 @@ const ManageProduct = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/types")
-      .then((res) => {
-        // console.log(res.data);
-        setTypeArr(res.data.filter((item) => item.del_flag == 0));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    async function fetchData() {
+      await axios
+        .get("http://localhost:8000/api/types")
+        .then((res) => {
+          // console.log(res.data);
+          setTypeArr(res.data.filter((item) => item.del_flag == 0));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-    axios
-      .get("http://localhost:8000/api/product")
-      .then((res) => {
-        // console.log(res.data);
-        setDataArr(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      await axios
+        .get("http://localhost:8000/api/product")
+        .then((res) => {
+          // console.log(res.data);
+          setDataArr(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    fetchData();
   }, []);
   return (
     <div className="manage-product">
@@ -85,7 +92,7 @@ const ManageProduct = () => {
                 return (
                   <tr>
                     <td>{index + 1}</td>
-                    <td>{item.name}</td>
+                    <td width="400px">{item.name}</td>
                     <td>
                       {typeArr.find((el) => el.id_type === item.id_type)
                         ? typeArr.find((el) => el.id_type === item.id_type).name
@@ -101,7 +108,7 @@ const ManageProduct = () => {
                       <Button
                         variant="outline-success"
                         className="mr-3"
-                        onClick={() => handleEditShow(item.id_prod)}
+                        onClick={() => handleEditShow(item.id_prod, item)}
                       >
                         <i class="bi bi-pencil-fill"></i>
                         Sửa
