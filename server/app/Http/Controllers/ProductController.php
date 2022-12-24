@@ -78,6 +78,32 @@ class ProductController extends Controller
         return $prods;
     }
 
+            /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getByTypeLatest($id_type)
+    {
+        //
+        $prods = DB::table('product')->where('id_type',$id_type)->orderBy('created_at', 'desc')->get();
+        return $prods;
+    }
+
+    
+            /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getByTypePrice($id_type, $type_price)
+    {
+        $prods = DB::table('product')->where('id_type',$id_type)->orderBy('price', $type_price)->get();
+        return $prods;
+    }
+
     
         /**
      * Display the specified resource.
@@ -93,7 +119,44 @@ class ProductController extends Controller
         foreach($types as $type) {
             array_push($typesId, $type->id_type);
         }
-        $prods = DB::table('product')->whereIn('id_type',$typesId)->get();
+        $prods = DB::table('product')->whereIn('id_type',$typesId)->orderBy('created_at', 'desc')->get();
+        return $prods;
+    }
+
+            /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getByCataLatest($id_cata)
+    {
+        //
+        $types = DB::table('typeproduct')->where('id_catalog', $id_cata)->get();
+        $typesId = [];
+        foreach($types as $type) {
+            array_push($typesId, $type->id_type);
+        }
+        $prods = DB::table('product')->whereIn('id_type',$typesId)->orderBy('created_at', 'desc')->get();
+        return $prods;
+    }
+
+                /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @param  string  $type
+     * @return \Illuminate\Http\Response
+     */
+    public function getByCataPrice($id_cata, $type_price)
+    {
+        //
+        $types = DB::table('typeproduct')->where('id_catalog', $id_cata)->get();
+        $typesId = [];
+        foreach($types as $type) {
+            array_push($typesId, $type->id_type);
+        }
+        $prods = DB::table('product')->whereIn('id_type',$typesId)->orderBy('price', $type_price)->get();
         return $prods;
     }
 
@@ -188,6 +251,19 @@ class ProductController extends Controller
         //
     }
 
+        /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function search($search)
+    {
+        // $search = mysql_real_escape_string($search);
+        $products = Product::where('name', 'LIKE', '%'.$search.'%')->get();
+        return $products;
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -210,6 +286,32 @@ class ProductController extends Controller
         $prod->save();
         
         return ['status'=>1,'message'=> 'prod edited', 'prod' => $prod];
+    }
+
+        /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateQuantity(Request $request)
+    {
+        // $data = json_decode($request->data, true);
+        // // xoas marng
+        // $updateProduct = Product::whereIn('id_prod',$test_value)
+        // ->update(['quantity' => 'My title']);
+        $data = json_decode($request->data, true);
+        // return ['data'=>$data];
+        foreach($data as $item) {
+            $prod = Product::find($item["id_prod"]);
+            // return ['data'=>$item->quantity];
+            if($prod) {
+                $quantity = (Int)$prod->quantity - (Int)$item["quantity"];
+                $prod->update(["quantity"=>$quantity]);
+            }
+        }
+        // return [];
+        
     }
 
     /**

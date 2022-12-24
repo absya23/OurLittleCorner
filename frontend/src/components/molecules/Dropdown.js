@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import ReactDOM from "react-dom";
+import { v4 } from "uuid";
 import useClickOutside from "../../hook/useClickOutside";
 
-const Dropdown = () => {
+const Dropdown = ({
+  data = [],
+  chooseFilter = 1,
+  setChooseFilter = () => {},
+}) => {
   const [input, setInput] = useState("Mới nhất");
   const { nodeRef: dropdownRef, show, setShow } = useClickOutside();
   const [coords, setCoords] = useState({});
@@ -14,6 +19,7 @@ const Dropdown = () => {
         // console.log(e.target.innerText);
         setInput(e.target.innerText);
         setShow(false);
+        setChooseFilter(Number(e.target.getAttribute("data-id")));
       }
     }
     if (show) {
@@ -43,12 +49,18 @@ const Dropdown = () => {
       >
         {input}
       </div>
-      {show && <DropdownList coords={coords}></DropdownList>}
+      {show && (
+        <DropdownList
+          coords={coords}
+          data={data}
+          setChoose={setChooseFilter}
+        ></DropdownList>
+      )}
     </div>
   );
 };
 
-function DropdownList({ coords }) {
+function DropdownList({ coords, data, setChoose = () => {} }) {
   if (typeof document === "undefined") return null;
   return ReactDOM.createPortal(
     <div
@@ -59,9 +71,17 @@ function DropdownList({ coords }) {
         width: coords.width,
       }}
     >
-      <div className="p-3 cursor-pointer item">Mới nhất</div>
-      <div className="p-3 cursor-pointer item">Giá tăng dần</div>
-      <div className="p-3 cursor-pointer item">Giá giảm dần</div>
+      {data.length > 0 &&
+        data.map((item) => (
+          <div
+            key={v4()}
+            className="p-3 cursor-pointer item"
+            data-id={item.id}
+            // onClick={() => setChoose(item.id)}
+          >
+            {item.title}
+          </div>
+        ))}
     </div>,
     document.querySelector("body")
   );

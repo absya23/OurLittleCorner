@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductItem from "../../molecules/productItem/ProductItem";
 import ReactPaginate from "react-paginate";
 
-const itemsPerPage = 8;
-
-const ProductList = ({ data }) => {
+const ProductList = ({ data, itemsPerPage = 8 }) => {
   // console.log(data);
   const [currentItems, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -18,7 +16,7 @@ const ProductList = ({ data }) => {
     setCurrentItems(data?.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(data?.length / itemsPerPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemOffset, itemsPerPage]);
+  }, [itemOffset, itemsPerPage, data]);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
@@ -36,6 +34,7 @@ const ProductList = ({ data }) => {
               title={item?.name}
               price={item?.price}
               image={item?.image}
+              stock={item?.quantity}
             ></ProductItem>
           ))}
       </div>

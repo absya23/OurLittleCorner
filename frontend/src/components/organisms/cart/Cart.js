@@ -6,39 +6,36 @@ import InputCombo from "../../molecules/InputCombo";
 import { useCart } from "../../../context/cartContext";
 import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
 import handleFormatNumber from "../../../handlers/handleFormatNumber";
+import { v4 } from "uuid";
+import axios from "axios";
+import { useUser } from "../../../context/userContext";
 
 const Cart = () => {
   const navigate = useNavigate();
   // get data from cart context
   const cartContext = useCart();
+  const userContext = useUser();
 
-  // -----------------------------------------------------
-  // total money --> fix auto rerendering when quantity changes
-  // const [total, setTotal] = useState(handleCalTotal(cartContext?.cart || []));
-  // useEffect(() => {
-  //   setTotal(handleCalTotal(cartContext?.cart || []));
-  // }, []);
   return (
-    <div className="cart w-[350px] bg-white rounded shadow-xl flex flex-col absolute top-full -right-5 z-[999999] p-4 cursor-default">
-      <ul className="flex flex-col cart-list gap-y-3">
+    <div className="cart w-[420px] bg-white rounded shadow-xl shadow-gray-500 flex flex-col absolute top-full -right-5 z-[999999] p-4 cursor-default">
+      <ul className="cart-list-ul flex flex-col cart-list gap-y-3 max-h-[400px] overflow-y-auto overflow-x-hidden">
         {cartContext?.cart.length === 0 ? (
           <EmptyCart></EmptyCart>
         ) : (
           cartContext?.cart.map((item) => (
-            <CartItem
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              price={item.price}
-              quantity={item.quantity}
-              stock={item.stock}
-              image={item.image}
-            ></CartItem>
+            <CartItem key={v4()} item={item}></CartItem>
           ))
         )}
       </ul>
 
-      {cartContext?.cart.length === 0 ? (
+      {!userContext.user ? (
+        <Button
+          className="w-full rounded-md bg-primary hover:bg-hover"
+          onClick={() => navigate("/user/signin")}
+        >
+          Đăng nhập ngay
+        </Button>
+      ) : cartContext?.cart.length === 0 ? (
         <Button
           className="w-full rounded-md bg-primary hover:bg-hover"
           onClick={() => navigate("/product")}
@@ -47,7 +44,7 @@ const Cart = () => {
         </Button>
       ) : (
         <Fragment>
-          <div className="flex items-center justify-between pt-4 pb-3">
+          <div className="flex items-center justify-between pt-4 pb-3 mt-4 border-t">
             <span>Thành tiền</span>
             <span className="font-bold text-hot">
               {handleFormatNumber(cartContext?.totalMoney())}đ
@@ -65,19 +62,56 @@ const Cart = () => {
   );
 };
 
-const CartItem = ({ id, title, image, price, quantity, stock }) => {
+//id, title, image, price, quantity, stock
+
+const CartItem = ({ item }) => {
   const navigate = useNavigate();
   const cartContext = useCart();
   const removeProductFromCart = cartContext?.removeProductFromCart || null;
+  const updateQuantityFromCart = cartContext?.updateQuantityFromCart || null;
+  //
+  //
+  const handleRemoveProductFromCart = async (item) => {
+    // call API
+    await axios
+      .delete("http://localhost:8000/api/cart/" + item.id_cd)
+      .then((res) => {
+        if (res.data.status === 1) {
+          // alert("Xóa sản phẩm thành công");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    removeProductFromCart(item.id_prod);
+  };
+  //
+  const handleChangeQuantityFromCart = async (item, quantity) => {
+    await axios
+      .put("http://localhost:8000/api/cart/" + item.id_cd, {
+        id_cd: item.id_cd,
+        id_prod: item.id_prod,
+        quantity,
+      })
+      .then((res) => {
+        if (res.data.status === 1) {
+          // alert("Update sl sản phẩm thành công");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    updateQuantityFromCart(item.id_prod, quantity);
+  };
   return (
     <li className="flex items-center justify-between cursor-pointer cart-item">
       <img
-        src={image}
+        src={item.image}
         alt=""
         className="w-[88px] h-[88px] mr-3 cursor-pointer"
         onClick={() =>
-          navigate(`/product/${removeVietnameseTones(title)}`, {
-            state: { id },
+          navigate(`/product/${removeVietnameseTones(item.name)}`, {
+            state: { id: item.id_prod },
           })
         }
       />
@@ -85,23 +119,28 @@ const CartItem = ({ id, title, image, price, quantity, stock }) => {
         <h4
           className="font-bold cursor-pointer break-line-2 hover:text-secondary"
           onClick={() =>
-            navigate(`/product/${removeVietnameseTones(title)}`, {
-              state: { id },
+            navigate(`/product/${removeVietnameseTones(item.name)}`, {
+              state: { id: item.id_prod },
             })
           }
         >
-          {title}
+          {item.name}
         </h4>
         <p className="font-bold price text-hot">
-          Đơn giá: {handleFormatNumber(price)}
+          Đơn giá: {handleFormatNumber(item.price)}
         </p>
         <div className="flex items-center quantity gap-x-1">
-          <InputCombo type="CART" quantity={quantity} max={stock}></InputCombo>
+          <InputCombo
+            id={item.id_prod}
+            quantity={item.quantity}
+            max={item.stock}
+            action={(count) => handleChangeQuantityFromCart(item, count)}
+          ></InputCombo>
         </div>
       </div>
       <i
-        className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary"
-        onClick={removeProductFromCart.bind(this, id)}
+        className="w-3 p-3 cursor-pointer fa-solid fa-trash hover:text-primary mr-2"
+        onClick={() => handleRemoveProductFromCart(item)}
       ></i>
     </li>
   );

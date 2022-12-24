@@ -11,12 +11,17 @@ import { useCart } from "../../../context/cartContext";
 import Toast from "../../molecules/Toast";
 import axios from "axios";
 import LoadingSkeleton from "../../../loading/LoadingSkeleton";
+import { useUser } from "../../../context/userContext";
 
 const SingleProduct = () => {
+  //
+  const userContext = useUser();
+  //
   const navigate = useNavigate();
   const data = useLocation();
   const productId = data.state?.id;
   const [dataProd, setDataProd] = useState({ product: null, images: null });
+  const [loading, setLoading] = useState(false);
   const productPrice = handleFormatNumber(Number(dataProd.product?.price) || 0);
   // ------------------------------------------------------------------
   // chương trình giảm giá ---> cần fix để đồng bộ với sản phẩm trong giỏ hàng
@@ -32,28 +37,52 @@ const SingleProduct = () => {
   };
 
   const cartContext = useCart();
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const [showToastMess, setShowToastMess] = useState(false);
 
   // thêm vào giỏ hàng
-  const handleAddToCart = () => {
-    const data = {
-      id: dataProd.product.id,
-      title: dataProd.product.name,
-      image: dataProd.product.image,
-      price: dataProd.product.price,
-      stock: dataProd.product.quantity,
-      quantity,
-    };
-    // console.log(quantity);
-    cartContext.addProductToCart(data, Number(quantity));
-    setShowToastMess(true);
-    setTimeout(() => {
-      setShowToastMess(false);
-    }, 5000);
+  const handleAddToCart = async () => {
+    if (dataProd.product?.quantity == 0) {
+      alert("Sản phẩm đã hết! Không thể thêm vào giỏ hàng.");
+    } else {
+      let quantity = document.querySelector("input[name='quantity']")?.value;
+      // console.log(document.querySelector("input[name='quantity']")?.value);
+      // console.log(quantity);
+
+      // call API
+      await axios
+        .post("http://localhost:8000/api/cart/", {
+          id_user: userContext?.user.id_user,
+          id_prod: dataProd.product.id_prod,
+          quantity,
+        })
+        .then((res) => {
+          // alert("Thêm sản phẩm thành công");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      // change in useContext
+      const data = {
+        id_prod: dataProd.product.id_prod,
+        name: dataProd.product.name,
+        image: dataProd.product.image,
+        price: dataProd.product.price,
+        stock: dataProd.product.quantity,
+        quantity,
+      };
+      // console.log(quantity);
+      cartContext.addProductToCart(data, Number(quantity));
+      setShowToastMess(true);
+      setTimeout(() => {
+        setShowToastMess(false);
+      }, 5000);
+    }
   };
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       const respProd = await axios(
         `http://localhost:8000/api/product/${productId}`
@@ -61,16 +90,18 @@ const SingleProduct = () => {
       const respImgs = await axios(
         `http://localhost:8000/api/images/${productId}`
       );
+      setLoading(false);
       setDataProd({ product: respProd.data, images: respImgs.data });
       setProductImage(respProd.data.image);
     };
 
     fetchData();
-  }, []);
+  }, [productId]);
 
   return (
     <div className="container w-full my-10">
       {!dataProd.product && <SingleProductSkeleton></SingleProductSkeleton>}
+      {loading && <SingleProductSkeleton></SingleProductSkeleton>}
       {dataProd.product && (
         <>
           <Toast
@@ -166,8 +197,6 @@ const SingleProduct = () => {
                 <InputCombo
                   className="max-w-[300px]"
                   max={dataProd.product?.quantity}
-                  handleQuantity={(val) => setQuantity(val)}
-                  type="ADD"
                 ></InputCombo>
                 <span className="py-1">
                   {dataProd.product?.quantity} khả dụng
@@ -238,7 +267,24 @@ const SingleProductSkeleton = () => {
   return (
     <>
       <section className="flex flex-col items-start justify-center h-10 px-10 mb-5 font-bold bg-blue-100 breadcumb">
-        <span>Home &gt; Túi sách</span>
+        <span className="flex justify-center items-center gap-x-2">
+          Tất cả sản phẩm{" "}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
+          </svg>{" "}
+          Trở về
+        </span>
       </section>
       <section className="grid grid-cols-2 gap-5 mb-10">
         {/*>>>>> left product image */}

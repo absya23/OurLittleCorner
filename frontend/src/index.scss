@@ -56,6 +56,38 @@ a.active {
   background-color: inherit;
 }
 
+// table.checkout-table {
+//   border-collapse: collapse;
+//   border-radius: 10px;
+//   overflow: hidden;
+//   // tbody:before {
+//   //   line-height: 10px;
+//   //   content: ".";
+//   //   color: #fff;
+//   //   display: block;
+//   //   width: 100%;
+//   //   position: relative;
+//   //   left: -1px;
+//   //   z-index: 1;
+//   //   background: #fff;
+//   // }
+//   tr {
+//     border-left: 0;
+//     border-right: 0;
+//   }
+//   td,
+//   th {
+//     text-align: left;
+//     //   padding: 8px;
+//     border-top: 0;
+//     border-bottom: 1px solid #cae6ff;
+//     // }
+//     td {
+//       text-align: left;
+//     }
+//   }
+// }
+
 table {
   border-collapse: collapse;
   border-radius: 10px;
@@ -127,6 +159,30 @@ table {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: $secondary-color;
+}
+
+.cart-list-ul {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    // border: 1px solid gray;
+    box-shadow: inset 0 0 5px rgb(207, 207, 207);
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    // background: $primary-color;
+    // border-radius: 10px;
+    background: rgb(188, 230, 245);
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    // background: $secondary-color;
+  }
 }
 
 // ----> dropdown

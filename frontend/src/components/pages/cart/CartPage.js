@@ -8,13 +8,15 @@ import Button from "../../atoms/Button";
 import InputCombo from "../../molecules/InputCombo";
 import ProductSlide from "../../organisms/product/ProductSlide";
 import emptyCart from "../../../assets/emptyCartPage.png";
+import { v4 } from "uuid";
+import axios from "axios";
 
 const CartPage = () => {
   const navigate = useNavigate();
   const productRecently = productData;
   // get data from cart context
   const cartContext = useCart();
-
+  // console.log(cartContext.cart);
   return (
     <div className="cart-page">
       {cartContext?.cart?.length > 0 ? (
@@ -94,6 +96,44 @@ const CartPreviewList = ({
   };
   // const convertTitle = removeVietnameseTones(title);
   const navigate = useNavigate();
+  //
+  const handleRemoveProductFromCart = async (item) => {
+    // call API
+    await axios
+      .delete("http://localhost:8000/api/cart/" + item.id_cd)
+      .then((res) => {
+        if (res.data.status === 1) {
+          alert("Xóa sản phẩm thành công");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    removeProductFromCart(item.id_prod);
+  };
+
+  // +++++++++++++++++++++++++++++++++
+  // ==== LAG CHOS ROOIF ==
+  // ++++++++++++++++++
+
+  const handleChangeQuantityFromCart = async (item, quantity) => {
+    await axios
+      .put("http://localhost:8000/api/cart/" + item.id_cd, {
+        id_cd: item.id_cd,
+        id_prod: item.id_prod,
+        quantity,
+      })
+      .then((res) => {
+        if (res.data.status === 1) {
+          // alert("Update sl sản phẩm thành công");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    updateQuantityFromCart(item.id_prod, quantity);
+  };
+
   return (
     <section className="mb-5">
       <table className="w-full py-4">
@@ -123,19 +163,16 @@ const CartPreviewList = ({
           {data &&
             data.length > 0 &&
             data.map((item, index) => (
-              <tr key={index}>
+              <tr key={v4()}>
                 <td>
                   <img
                     src={item.image}
                     alt=""
                     className="max-w-[100px] h-[100px] cursor-pointer"
                     onClick={() =>
-                      navigate(
-                        `/product/${removeVietnameseTones(item.title)}`,
-                        {
-                          state: { id: item.id },
-                        }
-                      )
+                      navigate(`/product/${removeVietnameseTones(item.name)}`, {
+                        state: { id: item.id_prod },
+                      })
                     }
                   />
                 </td>
@@ -143,15 +180,12 @@ const CartPreviewList = ({
                   <p
                     className="cursor-pointer hover:text-secondary "
                     onClick={() =>
-                      navigate(
-                        `/product/${removeVietnameseTones(item.title)}`,
-                        {
-                          state: { id: item.id },
-                        }
-                      )
+                      navigate(`/product/${removeVietnameseTones(item.name)}`, {
+                        state: { id: item.id_prod },
+                      })
                     }
                   >
-                    {item.title}
+                    {item.name}
                   </p>
                 </td>
                 <td>
@@ -160,12 +194,14 @@ const CartPreviewList = ({
                 <td>
                   <div className="flex justify-center w-full gap-x-1">
                     <InputCombo
-                      type="CART"
-                      id={item.id}
+                      id={item.id_prod}
                       className="items-center"
                       quantity={item?.quantity}
                       max={item?.stock}
-                      action={updateQuantityFromCart}
+                      // action={updateQuantityFromCart}
+                      action={(count) =>
+                        handleChangeQuantityFromCart(item, count)
+                      }
                     ></InputCombo>
                   </div>
                 </td>
@@ -175,7 +211,7 @@ const CartPreviewList = ({
                 <td>
                   <p
                     className="cursor-pointer hover:text-red-500 hover:underline"
-                    onClick={removeProductFromCart.bind(this, item.id)}
+                    onClick={() => handleRemoveProductFromCart(item)}
                   >
                     Xóa
                   </p>

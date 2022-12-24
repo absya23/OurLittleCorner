@@ -1,17 +1,28 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleFetchProduct } from "../../../redux/handlers";
+import { useProduct } from "../../../context/productContext";
 import ProductTitle from "../../atoms/ProductTitle";
 import ProductItem from "../../molecules/productItem/ProductItem";
 
-const Product = ({ children, title, length }) => {
+const Product = ({ children, title, length, type = "" }) => {
   const navigate = useNavigate();
-  const { data: dataProd, loading } = useSelector((state) => state.product);
-  const dispatch = useDispatch();
+  const { product } = useProduct();
+  const [dataProd, setDataProd] = useState(product);
   useEffect(() => {
-    dispatch(handleFetchProduct());
-  }, [dispatch]);
+    if (type === "new") {
+      axios
+        .get("http://localhost:8000/api/product/date/latest")
+        .then((res) => {
+          setDataProd(res.data);
+          // console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
   return (
     <section className="mb-20 product">
       <div className="container">
@@ -28,10 +39,11 @@ const Product = ({ children, title, length }) => {
                 .map((item, index) => (
                   <ProductItem
                     key={index}
-                    id={item?.id}
+                    id={item?.id_prod}
                     title={item?.name}
                     price={item?.price}
                     image={item?.image}
+                    stock={item?.quantity}
                   ></ProductItem>
                 ))}
             {!length &&
@@ -40,10 +52,11 @@ const Product = ({ children, title, length }) => {
                 .map((item, index) => (
                   <ProductItem
                     key={index}
-                    id={item?.id}
+                    id={item?.id_prod}
                     title={item?.name}
                     price={item?.price}
                     image={item?.image}
+                    stock={item?.quantity}
                   ></ProductItem>
                 ))}
           </div>

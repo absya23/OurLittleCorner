@@ -56,12 +56,22 @@ Route::post('product', 'ProductController@store');
 Route::delete('product/{id}', 'ProductController@destroy');
 // -> sửa 1 PRODUCT
 Route::put('product/{id}', 'ProductController@update');
+// -> cập nhật sl tồn kho khi đặt hàng
+Route::post('product/update', 'ProductController@updateQuantity');
 // -> lấy sản phẩm theo id_prod
 Route::get('product/{id}', 'ProductController@show');
 // -> lấy sản phẩm theo danh mục
 Route::get('product/cata/{id_cata}', 'ProductController@getByCata');
 // -> lấy sản phẩm theo loại sản phẩm
 Route::get('product/type/{id_type}', 'ProductController@getByType');
+
+// -> lấy sản phẩm theo danh mục và sx theo tgian, theo giá tăng, theo giá giảm
+Route::get('product/cata/{id_cata}/date/latest', 'ProductController@getByCataLatest');
+Route::get('product/cata/{id_cata}/{type_price}', 'ProductController@getByCataPrice');
+// -> lấy sản phẩm theo loại sản phẩm và sx theo tgian, theo giá tăng, theo giá giảm
+Route::get('product/type/{id_type}/date/latest', 'ProductController@getByTypeLatest');
+Route::get('product/type/{id_type}/{type_price}', 'ProductController@getByTypePrice');
+
 // -> sắp xếp sản phẩm theo giá giảm dần
 Route::get('product/sort/desc', 'ProductController@getPriceDesc');
 // -> sắp xếp sản phẩm theo giá tăng dần
@@ -73,6 +83,9 @@ Route::get('product/date/latest', 'ProductController@getLatest');
 // -> max/min price of products 
 Route::get('product/price/max', 'ProductController@getMaxPrice');
 Route::get('product/price/min', 'ProductController@getMinPrice');
+//  -> tìm theo tên sản phẩm
+Route::get('product/search/{search}', 'ProductController@search');
+
 
 
 // ===========  IMAGES ===========================
@@ -132,5 +145,21 @@ Route::delete('slide/{id}', 'SlideController@destroy');
 Route::get('cart', 'CartDetailController@index');
 // get all cartdetail by id_user
 Route::get('cart/{id_user}', 'CartDetailController@show');
+// add product to cartdetail
+Route::post('cart', 'CartDetailController@store');
+// xoá sp khỏi giỏ hàng
+Route::delete('cart/{id}', 'CartDetailController@destroy');
+//  Thay đổi số lượng sp trong giỏ hàng
+Route::put('cart/{id}', 'CartDetailController@update');
+// sau khi đặt hàng thành công, xóa list sp khỏi giỏ hàng
+Route::post('cart/delete', 'CartDetailController@deleteCarts');
 
 // ========== FAVO DETAIL =================
+// get all favodetail
+Route::get('favo', 'FavoDetailController@index');
+// get all favodetail by id_user
+Route::get('favo/{id_user}', 'FavoDetailController@show');
+// add favodetail 
+Route::post('favo', 'FavoDetailController@store');
+// remove favodetail
+Route::delete('favo/{id}', 'FavoDetailController@destroy');
