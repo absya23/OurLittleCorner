@@ -259,7 +259,7 @@ export const ProductItemImage = ({
   image = "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
 }) => {
   return (
-    <div className="cursor-pointer product-item-2">
+    <div className="cursor-auto product-item-2">
       <div className="relative mb-2 image">
         <img src={image} alt="" />
         <div className="absolute inset-0 flex items-center justify-center w-full h-full bg-white product-action opacity-70">

@@ -110,7 +110,7 @@ Route::post('user/login', 'UserController@login');
 // -> create new user 
 Route::post('user/register', 'UserController@store');
 // -> forget password
-// Route::post('user/getpassword', 'UserController@update');
+Route::post('user/getpassword/{id}', 'UserController@checkPass');
 // -> sửa thông tin user
 Route::put('user/{id}', 'UserController@update');
 

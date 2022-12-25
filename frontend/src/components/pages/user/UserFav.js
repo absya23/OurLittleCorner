@@ -4,27 +4,43 @@ import { v4 } from "uuid";
 import { useCart } from "../../../context/cartContext";
 import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
 import handleFormatNumber from "../../../handlers/handleFormatNumber";
+import Button from "../../atoms/Button";
 import Toast from "../../molecules/Toast";
 
 const UserFav = ({ user, favoProds, navigate = () => {} }) => {
   // console.log(favoProds);
   return (
     <div className="right col-span-3 border flex-4 p-5">
-      <h3 className="uppercase font-bold">Sản phẩm yêu thích</h3>
-      <p className="mb-5 border-b pb-5">
-        Hãy ♥ sản phẩm bạn yêu thích để xem thuận tiện hơn
+      <h3 className="uppercase font-bold mb-2 text-[18px]">
+        Sản phẩm yêu thích
+      </h3>
+      <p className="mb-3 border-b pb-3 text-[14px]">
+        Hãy <i className="fa-solid fa-heart text-primary"></i> sản phẩm bạn yêu
+        thích để xem thuận tiện hơn
       </p>
-      <div className="content grid grid-cols-4 gap-4">
-        {favoProds.length > 0 &&
-          favoProds.map((item) => (
-            <ProductItem
-              key={v4()}
-              user={user}
-              item={item}
-              navigate={navigate}
-            ></ProductItem>
-          ))}
-      </div>
+      {favoProds.length === 0 ? (
+        <div className="flex flex-col items-center">
+          <p className="mb-4">Chưa có sản phẩm nào</p>
+          <Button
+            className="w-auto px-5 text-lg normal-case rounded-md bg-primary hover:bg-hover"
+            onClick={() => navigate("/product")}
+          >
+            Xem tất cả sản phẩm
+          </Button>
+        </div>
+      ) : (
+        <div className="content grid grid-cols-4 gap-4">
+          {favoProds.length > 0 &&
+            favoProds.map((item) => (
+              <ProductItem
+                key={v4()}
+                user={user}
+                item={item}
+                navigate={navigate}
+              ></ProductItem>
+            ))}
+        </div>
+      )}
     </div>
   );
 };

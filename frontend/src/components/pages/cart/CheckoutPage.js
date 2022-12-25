@@ -5,6 +5,7 @@ import { v4 } from "uuid";
 import { useCart } from "../../../context/cartContext";
 import { useUser } from "../../../context/userContext";
 import { productData } from "../../../data/FakeData";
+import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
 import handleFormatNumber from "../../../handlers/handleFormatNumber";
 import Button from "../../atoms/Button";
 import ProductSlide from "../../organisms/product/ProductSlide";
@@ -137,6 +138,13 @@ const CheckoutPage = () => {
                     className="outline-none rounded-md px-3 py-2 focus:border-primary border"
                   />
                   <input
+                    type="email"
+                    placeholder=""
+                    value={userContext.user.email}
+                    readOnly
+                    className="outline-none rounded-md px-3 py-2 focus:border-primary border"
+                  />
+                  <input
                     type="text"
                     placeholder=""
                     value={userContext.user.address}
@@ -211,7 +219,11 @@ const CheckoutPage = () => {
                     </thead>
                     <tbody>
                       {cartContext.cart.map((item) => (
-                        <ProdItem key={v4()} data={item}></ProdItem>
+                        <ProdItem
+                          key={v4()}
+                          data={item}
+                          navigate={navigate}
+                        ></ProdItem>
                       ))}
                     </tbody>
                   </table>
@@ -249,12 +261,20 @@ const CheckoutPage = () => {
   );
 };
 
-const ProdItem = ({ data }) => {
+const ProdItem = ({ data, navigate = () => {} }) => {
+  const convertTitle = removeVietnameseTones(data.name);
   return (
     <tr>
       <td>
         <div className="flex flex-col font-light">
-          <p className="!text-[15px] cursor-pointer hover:text-secondary">
+          <p
+            className="!text-[15px] cursor-pointer hover:text-secondary"
+            onClick={() =>
+              navigate(`/product/${convertTitle}`, {
+                state: { id: data.id_prod },
+              })
+            }
+          >
             {data.name}
           </p>
           <span className="!text-[15px]">
