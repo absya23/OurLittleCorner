@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { Fragment, useState } from "react";
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
+import { removeVietnameseTones } from "../../../handlers/handleConvertUrl";
 import handleFormatNumber from "../../../handlers/handleFormatNumber";
 import LoadingSkeleton from "../../../loading/LoadingSkeleton";
 import Button from "../../atoms/Button";
@@ -29,6 +30,7 @@ const statusData = [
 const UserOrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [orderDetail, setOrderDetail] = useState(null);
+  const navigate = useNavigate();
 
   const data = useLocation();
   const orderId = data.state?.id;
@@ -244,7 +246,12 @@ const UserOrderDetail = () => {
           <div className="content flex flex-col">
             {orderDetail.data.length > 0 &&
               orderDetail.data.map((item, index) => (
-                <OrderItem key={v4()} index={index} data={item} />
+                <OrderItem
+                  key={v4()}
+                  index={index}
+                  data={item}
+                  navigate={navigate}
+                />
               ))}
           </div>
           {/*  */}
@@ -271,14 +278,24 @@ const UserOrderDetail = () => {
   );
 };
 
-const OrderItem = ({ index, data }) => {
+const OrderItem = ({ index, data, navigate }) => {
+  const convertTitle = removeVietnameseTones(data.name);
   return (
     <div className="flex p-5 gap-x-4 items-center">
       <span>{index + 1}</span>
       <img src={data?.image} alt="" className="w-[120px] border" />
       <div className="flex-1 flex justify-between">
         <div>
-          <h4 className="text-lg font-bold mb-3">{data?.name}</h4>
+          <h4
+            className="text-lg font-bold mb-3 cursor-pointer hover:text-secondary"
+            onClick={() =>
+              navigate(`/product/${convertTitle}`, {
+                state: { id: data.id_prod },
+              })
+            }
+          >
+            {data?.name}
+          </h4>
           <p>
             Số lượng: <b>{data?.quantity}</b>
           </p>

@@ -4,26 +4,70 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Input from "../../atoms/Input";
 import Button from "../../atoms/Button";
+import { useUser } from "../../../context/userContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const validateSchema = yup
   .object({
-    // username: yup.string().required("Trường này không được để trống"),
-    // password: yup
-    //   .string()
-    //   .min(8, "Tối thiểu 8 kí tự")
-    //   .required("Trường này không được để trống"),
+    username: yup.string().required("Trường này không được để trống"),
+    email: yup.string().email().required("Trường này không được để trống"),
+    phone: yup.string().required("Trường này không được để trống"),
+    address: yup.string().required("Trường này không được để trống"),
+    name: yup.string().required("Trường này không được để trống"),
+    password: yup
+      .string()
+      .min(5, "Tối thiểu 5 kí tự")
+      .required("Trường này không được để trống"),
+    repassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Mật khẩu không khớp"),
   })
   .required();
 
 const SignUpForm = () => {
+  //
   const {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(validateSchema), mode: "onChange" });
-  const onSubmit = (data) => {
+  //
+  const userContext = useUser();
+  const navigate = useNavigate();
+  //
+  const onSubmit = async (data) => {
     // gọi API ở đây để sign up
-    console.log({ data });
+    // console.log(data);
+
+    const dataUser = {
+      username: data.username,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      address: data.address,
+      password: data.password,
+    };
+    // API
+    await axios
+      .post(`http://localhost:8000/api/user/register`, dataUser)
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.status == 0) {
+          alert("Username đã tồn tại");
+        } else {
+          userContext.updateProfile({
+            ...dataUser,
+            id_user: res.data.data.id_user,
+          });
+          alert("Đăng kí thành công!");
+          navigate("/");
+        }
+        // window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <form
@@ -61,12 +105,18 @@ const SignUpForm = () => {
         )}
       </div>
       <div className="w-full mb-4 form-group">
-        <label htmlFor="birthd" className="inline-block mb-2">
-          Ngày sinh
+        <label htmlFor="email" className="inline-block mb-2">
+          Email
         </label>
-        <Input id="birthd" type="date" name="birthd" control={control}></Input>
-        {errors.birthd && (
-          <p className="text-sm text-red-500">{errors.birthd.message}</p>
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          control={control}
+          placeholder="minhvy@gmail.com"
+        ></Input>
+        {errors.email && (
+          <p className="text-sm text-red-500">{errors.email.message}</p>
         )}
       </div>
       <div className="w-full mb-4 form-group">
@@ -110,6 +160,7 @@ const SignUpForm = () => {
           name="password"
           placeholder="********"
           control={control}
+          autoComplete="off"
         ></Input>
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -121,13 +172,14 @@ const SignUpForm = () => {
         </label>
         <Input
           id="repassword"
-          type="repassword"
+          type="password"
           name="repassword"
           placeholder="********"
           control={control}
+          autoComplete="off"
         ></Input>
-        {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
+        {errors.repassword && (
+          <p className="text-sm text-red-500">{errors.repassword.message}</p>
         )}
       </div>
       <Button

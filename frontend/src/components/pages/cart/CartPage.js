@@ -37,13 +37,13 @@ const CartPage = () => {
             </p>
             <div className="flex justify-end w-1/3 ml-auto button-group gap-x-1">
               <Button
-                className="w-auto px-5 text-lg normal-case rounded-3xl bg-primary hover:bg-hover"
+                className="w-auto px-5 text-lg normal-case bg-white border rounded-3xl border-primary text-primary hover:bg-secondary hover:text-white"
                 onClick={() => navigate("/product")}
               >
                 Tiếp tục mua sắm
               </Button>
               <Button
-                className="w-auto px-5 text-lg normal-case bg-white border rounded-3xl border-primary text-primary hover:bg-secondary hover:text-white"
+                className=" w-auto px-5 text-lg normal-case rounded-3xl bg-primary hover:bg-hover"
                 onClick={() => navigate("/cart/checkout")}
               >
                 Thanh toán

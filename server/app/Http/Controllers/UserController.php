@@ -74,6 +74,7 @@ class UserController extends Controller
         else return ['status'=>1, 'data'=>$user];
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -95,17 +96,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $request->validate([
-            'username' => 'required',
-            // 'password' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'address' => 'required',
-            'phone' => 'required'
-        ]);
+        // $request->validate([
+        //     'username' => 'required',
+        //     // 'password' => 'required',
+        //     'name' => 'required',
+        //     'email' => 'required',
+        //     'address' => 'required',
+        //     'phone' => 'required'
+        // ]);
 
         $user = User::find($id);
         $user->update($request->all());
+        $user->password = Hash::make($request->password);
         $user->save();
         
         return ['status'=>1,'message'=> 'user edited', 'prod' => $user];
@@ -131,6 +133,22 @@ class UserController extends Controller
             }
         } 
         return ["status"=>0, "data"=>$request, "mess"=>"Đăng nhập thất bại!"];
+    }
+
+            /**
+     * LOGIN
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function checkPass(Request $request, $id)
+    {
+        $user = User::find($id);
+        if($user) {
+            if(Hash::check($request->password, $user->password)) {
+                return ["status"=>1, "mess"=>"Mật khẩu đúng"];
+            } else return ["status"=>0,"mess"=>"Mật khẩu sai"];
+        } 
     }
 
     /**
