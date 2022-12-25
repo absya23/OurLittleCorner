@@ -9,7 +9,7 @@ const UserOrder = ({ user, orders, navigate = () => {} }) => {
       <h3 className="uppercase font-bold pb-3 border-b mb-4 text-[18px]">
         Lịch sử đơn hàng
       </h3>
-      {orders.lenght > 0 ? (
+      {orders.length > 0 ? (
         <table className="w-full py-4">
           <thead>
             <tr>

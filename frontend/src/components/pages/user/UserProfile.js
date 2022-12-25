@@ -45,7 +45,7 @@ const UserProfile = () => {
       <div className="grid grid-cols-3 mt-3 gap-x-4 w-3/4">
         <div className="col-span-1 flex flex-col gap-y-6 items-end justify-evenly">
           <div>
-            Username <span className="text-[#f06455]">(*)</span>
+            Tên đăng nhập <span className="text-[#f06455]">(*)</span>
           </div>
           <div>
             Họ tên <span className="text-[#f06455]">(*)</span>
