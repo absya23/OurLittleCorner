@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <header className="w-full header sticky top-0 z-[9999] bg-white">
       {/* content */}
-      <div className="header-content h-[100px] shadow-sm w-full">
+      <div className="header-content h-[80px] shadow-sm w-full">
         <div className="container flex items-center justify-between h-full">
           {/* left */}
           <Link to="/" className="header--left">

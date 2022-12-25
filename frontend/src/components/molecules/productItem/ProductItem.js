@@ -152,7 +152,7 @@ const ProductItem = ({
         className="flex flex-col"
         onClick={() => navigate(`/product/${convertTitle}`, { state: { id } })}
       >
-        <h3 className="mb-3 name">{title}</h3>
+        <h3 className="mb-3 name break-line-2">{title}</h3>
         <div className="font-extrabold price text-[17px]">
           {handleFormatNumber(price)}đ
         </div>
