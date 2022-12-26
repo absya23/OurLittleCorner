@@ -35,6 +35,7 @@ const ProductList = ({ data, itemsPerPage = 8 }) => {
               price={item?.price}
               image={item?.image}
               stock={item?.quantity}
+              soldQuanity={item?.soldQuantity}
             ></ProductItem>
           ))}
       </div>

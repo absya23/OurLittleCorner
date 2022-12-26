@@ -7,7 +7,7 @@ import ProductCategory from "../../organisms/productCategory/ProductCategory";
 import "./ProductPage.scss";
 import { v4 } from "uuid";
 import { ProductItemSkeleton } from "../../molecules/productItem/ProductItem";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useProduct } from "../../../context/productContext";
 import { useCatalogue } from "../../../context/catalogueContext";
@@ -141,6 +141,17 @@ const ProductPage = () => {
             activeType={typeId}
           ></ProductCategory>
           <PriceRange></PriceRange>
+          <div className="w-full h-[1px] bg-primary mt-6"></div>
+          <div className="mt-5 flex items-center gap-x-1">
+            <i className="fa-solid fa-fire text-red-500"></i>
+            <Link
+              className="font-bold px-3 py-1 hover:text-red-400"
+              to="/product/best/seller"
+            >
+              BEST SELLER
+            </Link>
+            <i className="fa-solid fa-fire text-red-500"></i>
+          </div>
         </div>
         <div className="w-3/4 content">
           <div className="flex w-full mb-2 content-head">

@@ -85,7 +85,8 @@ Route::get('product/price/max', 'ProductController@getMaxPrice');
 Route::get('product/price/min', 'ProductController@getMinPrice');
 //  -> tìm theo tên sản phẩm
 Route::get('product/search/{search}', 'ProductController@search');
-
+// 
+Route::get('product/sold/best', 'ProductController@getBestSeller');
 
 
 // ===========  IMAGES ===========================

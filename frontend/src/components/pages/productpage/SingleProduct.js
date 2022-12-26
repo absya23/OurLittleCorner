@@ -12,6 +12,7 @@ import Toast from "../../molecules/Toast";
 import axios from "axios";
 import LoadingSkeleton from "../../../loading/LoadingSkeleton";
 import { useUser } from "../../../context/userContext";
+
 const SingleProduct = () => {
   //
   const userContext = useUser();
@@ -80,6 +81,43 @@ const SingleProduct = () => {
     }
   };
 
+  const handleBuy = async () => {
+    if (dataProd.product?.quantity == 0) {
+      alert("Sản phẩm đã hết! Không thể thêm mua.");
+    } else {
+      let quantity = document.querySelector("input[name='quantity']")?.value;
+      // console.log(document.querySelector("input[name='quantity']")?.value);
+      // console.log(quantity);
+
+      // change in useContext
+      const data = {
+        id_prod: dataProd.product.id_prod,
+        name: dataProd.product.name,
+        image: dataProd.product.image,
+        price: dataProd.product.price,
+        stock: dataProd.product.quantity,
+        quantity,
+      };
+      // console.log(quantity);
+      cartContext.addProductToCart(data, Number(quantity));
+
+      // call API
+      await axios
+        .post("http://localhost:8000/api/cart/", {
+          id_user: userContext?.user.id_user,
+          id_prod: dataProd.product.id_prod,
+          quantity,
+        })
+        .then((res) => {
+          // alert("Thêm sản phẩm thành công");
+          navigate("/cart/checkout");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -99,8 +137,9 @@ const SingleProduct = () => {
 
   return (
     <div className="container w-full my-10">
-      {!dataProd.product && <SingleProductSkeleton></SingleProductSkeleton>}
-      {loading && <SingleProductSkeleton></SingleProductSkeleton>}
+      {(!dataProd.product || loading) && (
+        <SingleProductSkeleton></SingleProductSkeleton>
+      )}
       {dataProd.product && (
         <>
           <Toast
@@ -181,7 +220,7 @@ const SingleProduct = () => {
                 {dataProd.product?.name}
               </h1>
               <p className="pr-6 mb-4 bg-opacity-50 text-end bg-primary">
-                <b>10k</b> đã bán
+                <b>{dataProd.product?.soldQuantity}</b> đã bán
               </p>
               {/* price */}
               <div className="flex items-center mb-6 price gap-x-4">
@@ -219,7 +258,7 @@ const SingleProduct = () => {
                   Thêm vào giỏ hàng
                 </Button>
                 <Button
-                  onClick={() => navigate("/cart/checkout")}
+                  onClick={handleBuy}
                   className="w-auto px-4 font-bold border hover:bg-hover border-primary"
                 >
                   Mua ngay
