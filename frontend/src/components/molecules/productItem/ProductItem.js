@@ -17,6 +17,7 @@ const ProductItem = ({
   price = "EMPTY",
   image = "https://img.cdn.vncdn.io/nvn/ncdn/store/7534/ps/20221004/22093331.jpg",
   stock = 0,
+  soldQuanity = 0,
 }) => {
   //
   const userContext = useUser();
@@ -104,6 +105,12 @@ const ProductItem = ({
         {stock == 0 && (
           <span className="absolute top-0 left-0 z-10 px-2 py-1 text-white bg-gray-500">
             Hết hàng
+          </span>
+        )}
+
+        {Number(stock) !== 0 && Number(soldQuanity) !== 0 && (
+          <span className="absolute top-0 left-0 z-10 px-2 py-1 text-white bg-red-400">
+            {soldQuanity} đã bán
           </span>
         )}
 

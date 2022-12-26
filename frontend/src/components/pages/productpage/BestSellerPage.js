@@ -1,30 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import PartTitle from "../../atoms/PartTitle";
 import { ProductItemSkeleton } from "../../molecules/productItem/ProductItem";
 import ProductList from "../../organisms/product/ProductList";
 
-// const filter = [
-//   {
-//     id: 1,
-//     title: "Mới nhất",
-//   },
-//   {
-//     id: 2,
-//     title: "Giá tăng dần",
-//   },
-//   {
-//     id: 3,
-//     title: "Giá giảm dần",
-//   },
-// ];
-
-const SearchPage = () => {
-  const data = useLocation();
-  const searchParam = data.state?.searchParam;
+const BestSellerPage = () => {
   const [loading, setLoading] = useState(true);
   const [dataProd, setDataProd] = useState([]);
   const navigate = useNavigate();
@@ -32,7 +14,7 @@ const SearchPage = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8000/api/product/search/${searchParam}`)
+      .get(`http://localhost:8000/api/product/sold/best`)
       .then((res) => {
         // console.log(res.data.length / 8);
         setDataProd(res.data);
@@ -41,14 +23,10 @@ const SearchPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [searchParam]);
+  }, []);
   return (
     <div className="mb-20 search-page">
-      <div className="container flex mt-5 gap-x-5 flex-col">
-        {/* <div className="w-1/4 left">
-          <ProductCategory></ProductCategory>
-          <PriceRange></PriceRange>
-        </div> */}
+      <div className="container w-full flex flex-col mt-5 gap-x-5">
         <section className="flex items-center justify-start h-10 px-10 mb-5 font-bold bg-blue-100 gap-x-2 breadcumb">
           <Link to="/product" className="hover:text-secondary">
             Tất cả sản phẩm
@@ -74,20 +52,12 @@ const SearchPage = () => {
             Trở về
           </p>
         </section>
-        <div className="w-3/4 content mx-auto">
+        <div className="w-full content mx-auto">
           <div className="flex w-full mb-2 content-head">
             <div className="flex-1">
-              <PartTitle title={`Tìm kiếm: "${searchParam}"`}></PartTitle>
+              <PartTitle title={`Sản phẩm bán chạy nhất`}></PartTitle>
               <div className="w-full h-[1px] bg-primary mb-3"></div>
             </div>
-            {/*  */}
-            {/* <div className="dropdown-filter h-full w-[150px] ml-5">
-              <Dropdown
-                data={filter}
-                // chooseFilter={chooseFilter}
-                // setChooseFilter={setChooseFilter}
-              ></Dropdown>
-            </div> */}
           </div>
           {loading && (
             <div className="grid grid-cols-4 gap-5 mb-20 product-list">
@@ -97,7 +67,7 @@ const SearchPage = () => {
             </div>
           )}
           {!loading && dataProd.length > 0 && (
-            <ProductList itemsPerPage={12} data={dataProd}></ProductList>
+            <ProductList itemsPerPage={8} data={dataProd}></ProductList>
           )}
           {dataProd.length === 0 && <p>Không có sản phẩm nào hợp lệ</p>}
         </div>
@@ -106,4 +76,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default BestSellerPage;

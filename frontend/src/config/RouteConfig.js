@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Main from "../components/layout/Main";
+import BestSellerPage from "../components/pages/productpage/BestSellerPage";
 
 const HomePage = lazy(() => import("../components/pages/homepage/HomePage"));
 const ProductPage = lazy(() =>
@@ -63,6 +64,10 @@ const RouteConfig = () => {
           <Route path="/cart" element={<CartPage />}></Route>
           <Route path="/cart/checkout" element={<CheckoutPage />}></Route>
           <Route path="/product/:title" element={<SingleProduct />}></Route>
+          <Route
+            path="/product/best/seller"
+            element={<BestSellerPage />}
+          ></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/test" element={<div>test</div>}></Route>
           <Route path="*" element={<Navigate to="/" replace />}></Route>

@@ -61,8 +61,18 @@ class ProductController extends Controller
     public function show($id)
     {
         //
-        $prod = DB::table('product')->join('typeproduct','product.id_type','=','typeproduct.id_type')->where('product.id_prod',$id)->select('product.*', 'typeproduct.name as nameType')->first();
-        return $prod;
+        // $prod = DB::table('product')->join('typeproduct','product.id_type','=','typeproduct.id_type')->where('product.id_prod',$id)->select('product.*', 'typeproduct.name as nameType')->first();
+        $prodOD = DB::table('product')->leftJoin("orderdetail", "product.id_prod", "=", "orderdetail.id_prod")->select('product.*', DB::raw('IFNULL(orderdetail.quantity, 0) as soldQuantity'));
+
+        $prods = DB::table('product')->select('product.id_prod', DB::raw('sum(prodOD.soldQuantity) as soldQuantity'))
+        ->joinSub($prodOD,'prodOD', function($join) {$join->on('prodOD.id_prod','=','product.id_prod');
+        })->groupBy('product.id_prod');
+
+        $result = DB::table('product')->select('product.*', 'typeproduct.name as nameType', 'prods.soldQuantity')->join('typeproduct','product.id_type','=','typeproduct.id_type')
+        ->joinSub($prods,'prods', function($join) {$join->on('prods.id_prod','=','product.id_prod');
+        })->where("product.id_prod",$id)->first();
+
+        return $result;
     }
 
         /**
@@ -237,6 +247,23 @@ class ProductController extends Controller
         $prods = DB::table('product')
         ->orderBy('updated_at', 'desc')
         ->get();
+        return $prods;
+    }
+
+        /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getBestSeller()
+    {
+        //
+        $prodsSold = DB::table('orderdetail')->select('orderdetail.id_prod as id_prod', DB::raw('sum(orderdetail.quantity) as soldQuantity'))->groupBy('id_prod');
+
+        $prods = DB::table('product')->select('product.*','prodsSold.soldQuantity')
+        ->joinSub($prodsSold,'prodsSold', function($join) {$join->on('prodsSold.id_prod','=','product.id_prod');
+        })->orderBy('prodsSold.soldQuantity', 'DESC')->get();
+
         return $prods;
     }
 
